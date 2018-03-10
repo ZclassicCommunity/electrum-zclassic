@@ -75,33 +75,32 @@ class NetworkConstants:
     def set_mainnet(cls):
         cls.TESTNET = False
         cls.WIF_PREFIX = 0x80
-        cls.ADDRTYPE_P2PKH = 0
-        cls.ADDRTYPE_P2SH = 5
-        cls.SEGWIT_HRP = "bc"
-        cls.HEADERS_URL = "https://headers.electrum.org/blockchain_headers"
-        cls.GENESIS = "000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+        cls.ADDRTYPE_P2PKH = 0x1CB8
+        cls.ADDRTYPE_P2SH = 0x1CBD
+        cls.HEADERS_URL = ''  # TODO headers bootstrap
+        cls.GENESIS = '00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08'
         cls.DEFAULT_PORTS = {'t': '50001', 's': '50002'}
         cls.DEFAULT_SERVERS = read_json_dict('servers.json')
 
     @classmethod
     def set_testnet(cls):
         cls.TESTNET = True
-        cls.WIF_PREFIX = 0xef
-        cls.ADDRTYPE_P2PKH = 111
-        cls.ADDRTYPE_P2SH = 196
-        cls.SEGWIT_HRP = "tb"
-        cls.HEADERS_URL = "https://headers.electrum.org/testnet_headers"
-        cls.GENESIS = "000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943"
+        cls.WIF_PREFIX = 0xEF
+        cls.ADDRTYPE_P2PKH = 0x1D25
+        cls.ADDRTYPE_P2SH = 0x1CBA
+        cls.HEADERS_URL = ''  # TODO headers bootstrap
+        cls.GENESIS = '05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38'
         cls.DEFAULT_PORTS = {'t':'51001', 's':'51002'}
         cls.DEFAULT_SERVERS = read_json_dict('servers_testnet.json')
+        XPRV_HEADERS['standard'] = 0x04358394
+        XPUB_HEADERS['standard'] = 0x043587CF
 
 
 NetworkConstants.set_mainnet()
 
 ################################## transactions
 
-FEE_STEP = 10000
-MAX_FEE_RATE = 300000
+MAX_FEE_RATE = 10000
 FEE_TARGETS = [25, 10, 5, 2]
 
 COINBASE_MATURITY = 100
