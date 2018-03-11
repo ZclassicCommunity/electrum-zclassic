@@ -271,8 +271,6 @@ def seed_type(x):
         return 'old'
     elif is_new_seed(x):
         return 'standard'
-    elif is_new_seed(x, version.SEED_PREFIX_2FA):
-        return '2fa'
     return ''
 
 is_seed = lambda x: bool(seed_type(x))
@@ -558,7 +556,7 @@ from ecdsa.util import string_to_number, number_to_string
 
 def msg_magic(message):
     length = bfh(var_int(len(message)))
-    return b"\x18Bitcoin Signed Message:\n" + length + message
+    return b"\x18Zcash Signed Message:\n" + length + message
 
 
 def verify_message(address, sig, message):
