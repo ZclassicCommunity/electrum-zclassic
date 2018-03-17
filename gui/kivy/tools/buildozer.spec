@@ -1,13 +1,13 @@
 [app]
 
 # (str) Title of your application
-title = Electrum
+title = Electrum-Zcash
 
 # (str) Package name
-package.name = Electrum
+package.name = Electrum-Zcash
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum
+package.domain = org.electrum-zcash
 
 # (str) Source code where the main.py live
 source.dir = .
