@@ -38,6 +38,7 @@ import socks
 from . import util
 from . import bitcoin
 from .bitcoin import *
+from .blockchain import HDR_LEN, CHUNK_LEN
 from .interface import Connection, Interface
 from . import blockchain
 from .version import ELECTRUM_VERSION, PROTOCOL_VERSION
@@ -553,10 +554,12 @@ class Network(util.DaemonThread):
             if error is None:
                 self.relay_fee = int(result * COIN)
                 self.print_error("relayfee", self.relay_fee)
-        elif method == 'blockchain.block.get_chunk':
-            self.on_get_chunk(interface, response)
-        elif method == 'blockchain.block.get_header':
-            self.on_get_header(interface, response)
+        elif method == 'blockchain.block.headers':
+            height, count = params
+            if count == 1:
+                self.on_get_header(interface, response, height)
+            elif count == CHUNK_LEN:
+                self.on_get_chunk(interface, response, height)
 
         for callback in callbacks:
             callback(response)
@@ -704,7 +707,7 @@ class Network(util.DaemonThread):
         interface.mode = 'default'
         interface.request = None
         self.interfaces[server] = interface
-        self.queue_request('blockchain.headers.subscribe', [], interface)
+        self.queue_request('blockchain.headers.subscribe', [True], interface)
         if server == self.default_server:
             self.switch_to_interface(server)
         #self.notify('interfaces')
@@ -757,23 +760,26 @@ class Network(util.DaemonThread):
 
     def request_chunk(self, interface, idx):
         interface.print_error("requesting chunk %d" % idx)
-        self.queue_request('blockchain.block.get_chunk', [idx], interface)
+        self.queue_request('blockchain.block.headers',
+                           [CHUNK_LEN*idx, CHUNK_LEN], interface)
         interface.request = idx
         interface.req_time = time.time()
 
-    def on_get_chunk(self, interface, response):
+    def on_get_chunk(self, interface, response, height):
         '''Handle receiving a chunk of block headers'''
         error = response.get('error')
         result = response.get('result')
-        params = response.get('params')
-        if result is None or params is None or error is not None:
+        if result is None or error is not None:
             interface.print_error(error or 'bad response')
             return
+
+        hex_chunk = result.get('hex', None)
         # Ignore unsolicited chunks
-        index = params[0]
-        if interface.request != index:
+        index = height // CHUNK_LEN
+        if interface.request != index or height / CHUNK_LEN != index:
             return
-        connect = interface.blockchain.connect_chunk(index, result)
+
+        connect = interface.blockchain.connect_chunk(index, hex_chunk)
         # If not finished, get the next chunk
         if not connect:
             self.connection_down(interface.server)
@@ -789,22 +795,31 @@ class Network(util.DaemonThread):
 
     def request_header(self, interface, height):
         #interface.print_error("requesting header %d" % height)
-        self.queue_request('blockchain.block.get_header', [height], interface)
+        self.queue_request('blockchain.block.headers', [height, 1], interface)
         interface.request = height
         interface.req_time = time.time()
 
-    def on_get_header(self, interface, response):
+    def on_get_header(self, interface, response, height):
         '''Handle receiving a single block header'''
-        header = response.get('result')
-        if not header:
-            interface.print_error(response)
-            self.connection_down(interface.server)
-            return
-        height = header.get('block_height')
+        result = response.get('result', {})
+        hex_header = result.get('hex', None)
+
         if interface.request != height:
             interface.print_error("unsolicited header",interface.request, height)
             self.connection_down(interface.server)
             return
+
+        if not hex_header:
+            interface.print_error(response)
+            self.connection_down(interface.server)
+            return
+
+        if len(hex_header) != HDR_LEN*2:
+            interface.print_error('wrong header length', interface.request)
+            self.connection_down(interface.server)
+            return
+
+        header = blockchain.deserialize_header(bfh(hex_header), height)
 
         chain = blockchain.check_header(header)
         if interface.mode == 'backward':
@@ -901,7 +916,7 @@ class Network(util.DaemonThread):
         # If not finished, get the next header
         if next_height:
             if interface.mode == 'catch_up' and interface.tip > next_height + 50:
-                self.request_chunk(interface, next_height // 2016)
+                self.request_chunk(interface, next_height // CHUNK_LEN)
             else:
                 self.request_header(interface, next_height)
         else:
@@ -979,9 +994,17 @@ class Network(util.DaemonThread):
         self.on_stop()
 
     def on_notify_header(self, interface, header):
-        height = header.get('block_height')
-        if not height:
+        height = header.get('height')
+        hex_header = header.get('hex')
+        if not height or not hex_header:
             return
+
+        if len(hex_header) != HDR_LEN*2:
+            interface.print_error('wrong header length', interface.request)
+            self.connection_down(interface.server)
+            return
+
+        header = blockchain.deserialize_header(bfh(hex_header), height)
         interface.tip_header = header
         interface.tip = height
         if interface.mode != 'default':

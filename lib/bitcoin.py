@@ -64,8 +64,8 @@ class NetworkConstants:
     def set_mainnet(cls):
         cls.TESTNET = False
         cls.WIF_PREFIX = 0x80
-        cls.ADDRTYPE_P2PKH = 0x1CB8
-        cls.ADDRTYPE_P2SH = 0x1CBD
+        cls.ADDRTYPE_P2PKH = bytes.fromhex('1CB8')
+        cls.ADDRTYPE_P2SH = bytes.fromhex('1CBD')
         cls.HEADERS_URL = ''  # TODO headers bootstrap
         cls.GENESIS = '00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08'
         cls.DEFAULT_PORTS = {'t': '50001', 's': '50002'}
@@ -75,8 +75,8 @@ class NetworkConstants:
     def set_testnet(cls):
         cls.TESTNET = True
         cls.WIF_PREFIX = 0xEF
-        cls.ADDRTYPE_P2PKH = 0x1D25
-        cls.ADDRTYPE_P2SH = 0x1CBA
+        cls.ADDRTYPE_P2PKH = bytes.fromhex('1D25')
+        cls.ADDRTYPE_P2SH = bytes.fromhex('1CBA')
         cls.HEADERS_URL = ''  # TODO headers bootstrap
         cls.GENESIS = '05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38'
         cls.DEFAULT_PORTS = {'t':'51001', 's':'51002'}
@@ -309,15 +309,15 @@ def hash_160(public_key):
 
 
 def hash160_to_b58_address(h160, addrtype):
-    s = bytes([addrtype])
+    s = addrtype
     s += h160
     return base_encode(s+Hash(s)[0:4], base=58)
 
 
 def b58_address_to_hash160(addr):
     addr = to_bytes(addr, 'ascii')
-    _bytes = base_decode(addr, 25, base=58)
-    return _bytes[0], _bytes[1:21]
+    _bytes = base_decode(addr, 26, base=58)
+    return _bytes[0:2], _bytes[2:22]
 
 
 def hash160_to_p2pkh(h160):
