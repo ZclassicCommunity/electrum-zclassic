@@ -12,7 +12,7 @@ import argparse
 version = imp.load_source('version', 'lib/version.py')
 
 if sys.version_info[:3] < (3, 4, 0):
-    sys.exit("Error: Electrum requires Python version >= 3.4.0...")
+    sys.exit("Error: Electrum-Zcash requires Python version >= 3.4.0...")
 
 data_files = []
 
@@ -28,12 +28,12 @@ if platform.system() in ['Linux', 'FreeBSD', 'DragonFly']:
         else:
             usr_share = os.path.expanduser('~/.local/share')
     data_files += [
-        (os.path.join(usr_share, 'applications/'), ['electrum.desktop']),
-        (os.path.join(usr_share, 'pixmaps/'), ['icons/electrum.png'])
+        (os.path.join(usr_share, 'applications/'), ['electrum-zcash.desktop']),
+        (os.path.join(usr_share, 'pixmaps/'), ['icons/electrum-zcash.png'])
     ]
 
 setup(
-    name="Electrum",
+    name="Electrum-Zcash",
     version=version.ELECTRUM_VERSION,
     install_requires=[
         'pyaes>=0.1a1',
@@ -47,30 +47,28 @@ setup(
         'PySocks>=1.6.6',
     ],
     packages=[
-        'electrum',
-        'electrum_gui',
-        'electrum_gui.qt',
-        'electrum_plugins',
-        'electrum_plugins.audio_modem',
-        'electrum_plugins.cosigner_pool',
-        'electrum_plugins.email_requests',
-        'electrum_plugins.greenaddress_instant',
-        'electrum_plugins.hw_wallet',
-        'electrum_plugins.keepkey',
-        'electrum_plugins.labels',
-        'electrum_plugins.ledger',
-        'electrum_plugins.trezor',
-        'electrum_plugins.digitalbitbox',
-        'electrum_plugins.trustedcoin',
-        'electrum_plugins.virtualkeyboard',
+        'electrum_zcash',
+        'electrum_zcash_gui',
+        'electrum_zcash_gui.qt',
+        'electrum_zcash_plugins',
+        'electrum_zcash_plugins.audio_modem',
+        'electrum_zcash_plugins.cosigner_pool',
+        'electrum_zcash_plugins.email_requests',
+        'electrum_zcash_plugins.hw_wallet',
+        'electrum_zcash_plugins.keepkey',
+        'electrum_zcash_plugins.labels',
+        'electrum_zcash_plugins.ledger',
+        'electrum_zcash_plugins.trezor',
+        'electrum_zcash_plugins.digitalbitbox',
+        'electrum_zcash_plugins.virtualkeyboard',
     ],
     package_dir={
-        'electrum': 'lib',
-        'electrum_gui': 'gui',
-        'electrum_plugins': 'plugins',
+        'electrum_zcash': 'lib',
+        'electrum_zcash_gui': 'gui',
+        'electrum_zcash_plugins': 'plugins',
     },
     package_data={
-        'electrum': [
+        'electrum_zcash': [
             'servers.json',
             'servers_testnet.json',
             'currencies.json',
@@ -79,12 +77,12 @@ setup(
             'locale/*/LC_MESSAGES/electrum.mo',
         ]
     },
-    scripts=['electrum'],
+    scripts=['electrum-zcash'],
     data_files=data_files,
-    description="Lightweight Bitcoin Wallet",
+    description="Lightweight Zcash Wallet",
     author="Thomas Voegtlin",
     author_email="thomasv@electrum.org",
-    license="MIT Licence",
-    url="https://electrum.org",
-    long_description="""Lightweight Bitcoin Wallet"""
+    license="MIT License",
+    url="https://electrum-zcash.org",
+    long_description="""Lightweight Zcash Wallet"""
 )

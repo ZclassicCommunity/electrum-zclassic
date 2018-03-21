@@ -4,6 +4,7 @@
 build/
 dist/
 *.egg/
+*.egg/
 /electrum.py
 contrib/pyinstaller/
 Electrum.egg-info/
@@ -24,4 +25,5 @@ bin/
 electrum_data/
 gui/kivy/theming/light-0.png
 gui/kivy/theming/light.atlas
-Electrum_DASH.egg-info/
+Electrum_Zcash.egg-info/
+.pytest_cache

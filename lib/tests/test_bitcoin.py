@@ -64,16 +64,18 @@ class Test_bitcoin(unittest.TestCase):
 
         sig1 = sign_message_with_wif_privkey(
             'L1TnU2zbNaAqMoVh65Cyvmcjzbrj41Gs9iTLcWbpJCMynXuap6UN', msg1)
-        addr1 = '15hETetDmcXm1mM4sEf7U2KXC9hDHFMSzz'
+        addr1 = 't1NZqTzJMjwKMcQPxofUEbqRSSotJ7VVJSZ'
         sig2 = sign_message_with_wif_privkey(
             '5Hxn5C4SQuiV6e62A1MtZmbSeQyrLFhu5uYks62pU5VBUygK2KD', msg2)
-        addr2 = '1GPHVTY8UD9my6jyP4tb2TYJwUbDetyNC6'
+        addr2 = 't1ZFtVnxGSXwNZjnsKVhiAGeEC8nJPuJDDp'
 
         sig1_b64 = base64.b64encode(sig1)
         sig2_b64 = base64.b64encode(sig2)
 
-        self.assertEqual(sig1_b64, b'H/9jMOnj4MFbH3d7t4yCQ9i7DgZU/VZ278w3+ySv2F4yIsdqjsc5ng3kmN8OZAThgyfCZOQxZCWza9V5XzlVY0Y=')
-        self.assertEqual(sig2_b64, b'G84dmJ8TKIDKMT9qBRhpX2sNmR0y5t+POcYnFFJCs66lJmAs3T8A6Sbpx7KA6yTQ9djQMabwQXRrDomOkIKGn18=')
+        print('sig1_b64', sig1_b64)
+        print('sig2_b64', sig2_b64)
+        self.assertEqual(sig1_b64, b'IAcowIh4U6j342ioNfu/jH4OCcy+qtLp9O6P3aoFVk5NbC+UpsCDhBYwlg2R7gsw18TV1QKjDX7JkWaYb9pGdGo=')
+        self.assertEqual(sig2_b64, b'HIszHegFNJvGYqJYvzSqrBtfc1PdbR1fai93xIZUeXr6coc3XrEmEvjKvcyas2mermVUnaCVox944itoZg3bwt8=')
 
         self.assertTrue(verify_message(addr1, sig1, msg1))
         self.assertTrue(verify_message(addr2, sig2, msg2))
@@ -148,12 +150,12 @@ class Test_bitcoin(unittest.TestCase):
 
     def test_address_to_script(self):
         # base58 P2PKH
-        self.assertEqual(address_to_script('14gcRovpkCoGkCNBivQBvw7eso7eiNAbxG'), '76a91428662c67561b95c79d2257d2a93d9d151c977e9188ac')
-        self.assertEqual(address_to_script('1BEqfzh4Y3zzLosfGhw1AsqbEKVW6e1qHv'), '76a914704f4b81cadb7bf7e68c08cd3657220f680f863c88ac')
+        self.assertEqual(address_to_script('t1MZDS9LxiXasLqR5fMDK4kDa8TJjSFsMsq'), '76a91428662c67561b95c79d2257d2a93d9d151c977e9188ac')
+        self.assertEqual(address_to_script('t1U7SgL7CWNnawSvZD8k8JgwWUygasy2cp1'), '76a914704f4b81cadb7bf7e68c08cd3657220f680f863c88ac')
 
         # base58 P2SH
-        self.assertEqual(address_to_script('35ZqQJcBQMZ1rsv8aSuJ2wkC7ohUCQMJbT'), 'a9142a84cf00d47f699ee7bbc1dea5ec1bdecb4ac15487')
-        self.assertEqual(address_to_script('3PyjzJ3im7f7bcV724GR57edKDqoZvH7Ji'), 'a914f47c8954e421031ad04ecd8e7752c9479206b9d387')
+        self.assertEqual(address_to_script('t3NSSQe2KNgLcTWy2WsiRAkr7NTtZ15fhLn'), 'a9142a84cf00d47f699ee7bbc1dea5ec1bdecb4ac15487')
+        self.assertEqual(address_to_script('t3grLzdTrjSSiCFXzxV5YCvkYZt2tJjDLau'), 'a914f47c8954e421031ad04ecd8e7752c9479206b9d387')
 
 
 class Test_bitcoin_testnet(unittest.TestCase):
@@ -170,12 +172,12 @@ class Test_bitcoin_testnet(unittest.TestCase):
 
     def test_address_to_script(self):
         # base58 P2PKH
-        self.assertEqual(address_to_script('mutXcGt1CJdkRvXuN2xoz2quAAQYQ59bRX'), '76a9149da64e300c5e4eb4aaffc9c2fd465348d5618ad488ac')
-        self.assertEqual(address_to_script('miqtaRTkU3U8rzwKbEHx3g8FSz8GJtPS3K'), '76a914247d2d5b6334bdfa2038e85b20fc15264f8e5d2788ac')
+        self.assertEqual(address_to_script('tmQ5vePhZkGVbPhJdFd7J9bQF9p5jmVXGe5'), '76a9149da64e300c5e4eb4aaffc9c2fd465348d5618ad488ac')
+        self.assertEqual(address_to_script('tmD3HcYHK21Kypmi3UpSSDEgbSdoTcnduow'), '76a914247d2d5b6334bdfa2038e85b20fc15264f8e5d2788ac')
 
         # base58 P2SH
-        self.assertEqual(address_to_script('2N3LSvr3hv5EVdfcrxg2Yzecf3SRvqyBE4p'), 'a9146eae23d8c4a941316017946fc761a7a6c85561fb87')
-        self.assertEqual(address_to_script('2NE4ZdmxFmUgwu5wtfoN2gVniyMgRDYq1kk'), 'a914e4567743d378957cd2ee7072da74b1203c1a7a0b87')
+        self.assertEqual(address_to_script('t2Ge2v7dx9Q87aDcx9iDr48uxCEe1gBVzCT'), 'a9146eae23d8c4a941316017946fc761a7a6c85561fb87')
+        self.assertEqual(address_to_script('t2TN9d3YVzoaZqdwyrqZKjz6289tW3JF78v'), 'a914e4567743d378957cd2ee7072da74b1203c1a7a0b87')
 
 
 class Test_xprv_xpub(unittest.TestCase):
@@ -254,7 +256,7 @@ class Test_keyImport(unittest.TestCase):
     priv_pub_addr = (
            {'priv': 'KzMFjMC2MPadjvX5Cd7b8AKKjjpBSoRKUTpoAtN6B3J9ezWYyXS6',
             'pub': '02c6467b7e621144105ed3e4835b0b4ab7e35266a2ae1c4f8baa19e9ca93452997',
-            'address': '17azqT8T16coRmWKYFj3UjzJuxiYrYFRBR',
+            'address': 't1QTbqnYayRQQ2QZDUgYAcZ6EAcuddyRMbu',
             'minikey' : False,
             'txin_type': 'p2pkh',
             'compressed': True,
@@ -262,7 +264,7 @@ class Test_keyImport(unittest.TestCase):
             'scripthash': 'c9aecd1fef8d661a42c560bf75c8163e337099800b8face5ca3d1393a30508a7'},
            {'priv': '5Hxn5C4SQuiV6e62A1MtZmbSeQyrLFhu5uYks62pU5VBUygK2KD',
             'pub': '04e5fe91a20fac945845a5518450d23405ff3e3e1ce39827b47ee6d5db020a9075422d56a59195ada0035e4a52a238849f68e7a325ba5b2247013e0481c5c7cb3f',
-            'address': '1GPHVTY8UD9my6jyP4tb2TYJwUbDetyNC6',
+            'address': 't1ZFtVnxGSXwNZjnsKVhiAGeEC8nJPuJDDp',
             'minikey': False,
             'txin_type': 'p2pkh',
             'compressed': False,
@@ -271,7 +273,7 @@ class Test_keyImport(unittest.TestCase):
            # from http://bitscan.com/articles/security/spotlight-on-mini-private-keys
            {'priv': 'SzavMBLoXU6kDrqtUVmffv',
             'pub': '02588d202afcc1ee4ab5254c7847ec25b9a135bbda0f2bc69ee1a714749fd77dc9',
-            'address': '19GuvDvMMUZ8vq84wT79fvnvhMd5MnfTkR',
+            'address': 't1S9WvZLVKoLjXUAxssvGojtqx1pABJMJUU',
             'minikey': True,
             'txin_type': 'p2pkh',
             'compressed': True,  # this is actually ambiguous... issue #2748
@@ -352,9 +354,7 @@ class Test_seeds(unittest.TestCase):
         ('OSTRICH SECURITY DEER AUNT CLIMB INNER ALPHA ARM MUTUAL MARBLE SOLID TASK', 'standard'),
         ('   oStRiCh sEcUrItY DeEr aUnT ClImB       InNeR AlPhA ArM MuTuAl mArBlE   SoLiD TaSk  ', 'standard'),
         ('x8', 'standard'),
-        ('science dawn member doll dutch real can brick knife deny drive list', '2fa'),
         ('science dawn member doll dutch real ca brick knife deny drive list', ''),
-        (' sCience dawn   member doll Dutch rEAl can brick knife deny drive  lisT', '2fa'),
     }
     
     def test_new_seed(self):
