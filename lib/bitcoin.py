@@ -66,7 +66,7 @@ class NetworkConstants:
         cls.WIF_PREFIX = 0x80
         cls.ADDRTYPE_P2PKH = bytes.fromhex('1CB8')
         cls.ADDRTYPE_P2SH = bytes.fromhex('1CBD')
-        cls.HEADERS_URL = ''  # TODO headers bootstrap
+        cls.HEADERS_URL = 'https://github.com/zebra-lucky/electrum-zcash/releases/download/3.0.6/blockchain_headers'
         cls.GENESIS = '00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08'
         cls.DEFAULT_PORTS = {'t': '50001', 's': '50002'}
         cls.DEFAULT_SERVERS = read_json_dict('servers.json')
@@ -79,7 +79,7 @@ class NetworkConstants:
         cls.WIF_PREFIX = 0xEF
         cls.ADDRTYPE_P2PKH = bytes.fromhex('1D25')
         cls.ADDRTYPE_P2SH = bytes.fromhex('1CBA')
-        cls.HEADERS_URL = ''  # TODO headers bootstrap
+        cls.HEADERS_URL = 'https://github.com/zebra-lucky/electrum-zcash/releases/download/3.0.6/blockchain_headers_testnet'
         cls.GENESIS = '05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38'
         cls.DEFAULT_PORTS = {'t':'51001', 's':'51002'}
         cls.DEFAULT_SERVERS = read_json_dict('servers_testnet.json')
