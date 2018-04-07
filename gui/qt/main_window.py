@@ -1558,13 +1558,13 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         w.setLayout(vbox)
         vbox.setContentsMargins(0, 0, 0, 0)
         vbox.setSpacing(0)
+        vbox.addWidget(l)
         if list_header:
             hbox = QHBoxLayout()
             for b in list_header:
                 hbox.addWidget(b)
             hbox.addStretch()
             vbox.addLayout(hbox)
-        vbox.addWidget(l)
         return w
 
     def create_addresses_tab(self):
@@ -2072,7 +2072,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             return
         if not data:
             return
-        # if the user scanned a bitcoin URI
+        # if the user scanned a zcash URI
         if str(data).startswith("zcash:"):
             self.pay_to_URI(data)
             return
