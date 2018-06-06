@@ -310,7 +310,10 @@ class Blockchain(util.PrintError):
     def get_hash(self, height):
         return hash_header(self.read_header(height))
 
-    def get_median_time(self, height, chain=[]):
+    def get_median_time(self, height, chain=None):
+        if chain is None:
+            chain = []
+
         height_range = range(max(0, height - POW_MEDIAN_BLOCK_SPAN),
                              max(1, height))
         median = []
@@ -326,7 +329,10 @@ class Blockchain(util.PrintError):
         median.sort()
         return median[len(median)//2];
 
-    def get_target(self, height, chain=[]):
+    def get_target(self, height, chain=None):
+        if chain is None:
+            chain = []
+
         if bitcoin.NetworkConstants.TESTNET:
             return 0, 0
 
