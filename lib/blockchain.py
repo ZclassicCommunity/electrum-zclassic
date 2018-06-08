@@ -310,7 +310,10 @@ class Blockchain(util.PrintError):
         elif height < len_checkpoints * CHUNK_LEN - POW_AVERAGING_WINDOW:
             assert (height+1) % CHUNK_LEN == 0, height
             index = height // CHUNK_LEN
-            h, t = self.checkpoints[index]
+            if index < len_checkpoints - 1:
+                h, t = self.checkpoints[index]
+            else:
+                h, t, extra_headers = self.checkpoints[index]
             return h
         else:
             return hash_header(self.read_header(height))

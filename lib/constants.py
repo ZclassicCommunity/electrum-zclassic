@@ -46,7 +46,7 @@ class BitcoinMainnet:
     GENESIS = "00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08"
     DEFAULT_PORTS = {'t': '50021', 's': '50022'}
     DEFAULT_SERVERS = read_json('servers.json', {})
-    CHECKPOINTS = []
+    CHECKPOINTS = read_json('checkpoints.json', [])
 
     XPRV_HEADERS = {
         'standard':    0x0488ade4,  # xprv
@@ -67,7 +67,7 @@ class BitcoinTestnet:
     GENESIS = "05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38"
     DEFAULT_PORTS = {'t': '51021', 's': '51022'}
     DEFAULT_SERVERS = read_json('servers_testnet.json', {})
-    CHECKPOINTS = []
+    CHECKPOINTS = read_json('checkpoints_testnet.json', [])
 
     XPRV_HEADERS = {
         'standard':    0x04358394,  # tprv

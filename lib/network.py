@@ -987,9 +987,11 @@ class Network(util.DaemonThread):
         length = HDR_LEN * len(constants.net.CHECKPOINTS) * CHUNK_LEN
         if not os.path.exists(filename) or os.path.getsize(filename) < length:
             with open(filename, 'wb') as f:
-                if length>0:
-                    f.seek(length-1)
-                    f.write(b'\x00')
+                if length > 0:
+                    for height, hd in b.checkpoints[-1][2]:
+                        f.seek(height*80)
+                        bd = bfh(hd)
+                        f.write(bd)
         with b.lock:
             b.update_size()
 
