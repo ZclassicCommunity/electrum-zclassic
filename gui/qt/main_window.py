@@ -101,6 +101,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         self.gui_object = gui_object
         self.config = config = gui_object.config
 
+        self._old_excepthook = None
         self.setup_exception_hook()
 
         self.network = gui_object.daemon.network
@@ -540,14 +541,22 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
 
         help_menu = menubar.addMenu(_("&Help"))
         help_menu.addAction(_("&About"), self.show_about)
-        help_menu.addAction(_("&Official website"), lambda: webbrowser.open("https://github.com/zebra-lucky/electrum-zcash"))
+        #help_menu.addAction(_("&Official website"), lambda: webbrowser.open("https://github.com/zebra-lucky/electrum-zcash"))
         help_menu.addSeparator()
-        help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://github.com/zebra-lucky/electrum-zcash")).setShortcut(QKeySequence.HelpContents)
+        #help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://github.com/zebra-lucky/electrum-zcash")).setShortcut(QKeySequence.HelpContents)
+        #self._auto_crash_reports = QAction(_("&Automated Crash Reports"), self, checkable=True)
+        #self._auto_crash_reports.setChecked(self.config.get("show_crash_reporter", default=False))
+        #self._auto_crash_reports.triggered.connect(self.auto_crash_reports)
+        #help_menu.addAction(self._auto_crash_reports)
         help_menu.addAction(_("&Report Bug"), self.show_report_bug)
         help_menu.addSeparator()
         help_menu.addAction(_("&Donate to server"), self.donate_to_server)
 
         self.setMenuBar(menubar)
+
+    def auto_crash_reports(self, state):
+        self.config.set_key("show_crash_reporter", state)
+        self.setup_exception_hook()
 
     def donate_to_server(self):
         d = self.network.get_donation_address()
@@ -566,7 +575,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def show_report_bug(self):
         msg = ' '.join([
             _("Please report any bugs as issues on github:<br/>"),
-            "<a href=\"https://github.com/spesmilo/electrum/issues\">https://github.com/spesmilo/electrum/issues</a><br/><br/>",
+            "<a href=\"https://github.com/zebra-lucky/electrum-zcash/issues\">https://github.com/zebra-lucky/electrum-zcash/issues</a><br/><br/>",
             _("Before reporting a bug, upgrade to the most recent version of Electrum-Zcash (latest release or git HEAD), and include the version number in your report."),
             _("Try to explain not only what the bug is, but how it occurs.")
          ])
