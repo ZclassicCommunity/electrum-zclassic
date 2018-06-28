@@ -54,8 +54,7 @@ class BitcoinMainnet:
     XPUB_HEADERS = {
         'standard':    0x0488b21e,  # xpub
     }
-    DRKV_HEADER = 0x02fe52f8  # drkv
-    DRKP_HEADER = 0x02fe52cc  # drkp
+    OVERWINTER_HEIGHT = 347500
 
 
 class BitcoinTestnet:
@@ -75,8 +74,7 @@ class BitcoinTestnet:
     XPUB_HEADERS = {
         'standard':    0x043587cf,  # tpub
     }
-    DRKV_HEADER = 0x3a8061a0  # DRKV
-    DRKP_HEADER = 0x3a805837  # DRKP
+    OVERWINTER_HEIGHT = 207500
 
 
 class BitcoinRegtest(BitcoinTestnet):
