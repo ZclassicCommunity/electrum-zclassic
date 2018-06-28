@@ -1,14 +1,77 @@
-sudo: false
+sudo: required
 language: python
-python:
-    - "3.5"
-    - "3.6"
+services:
+- docker
+addons:
+  apt:
+    packages:
+    - libusb-1.0-0-dev
+    - libudev-dev
+matrix:
+  include:
+  - if: tag =~ .+
+    os: osx
+    language: ruby
+    osx_image: xcode7.3
+  - os: linux
+    python: "3.4"
+  - os: linux
+    python: "3.5"
+  - if: NOT tag =~ .+
+    os: linux
+    python: "3.6"
+before_install:
+- source contrib/zcash/travis/electrum_zcash_version_env.sh
+- echo electrum-zcash version is $ELECTRUM_ZCASH_VERSION
+- mkdir -p build && cp contrib/zcash/travis/* ./build/
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+      ./build/before_install-osx.sh;
+  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then
+      ./build/before_install-linux.sh;
+  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then
+      ./build/before_install-linux-apk.sh;
+  fi
 install:
-    - pip install tox
-    - pip install tox-travis
-    - pip install python-coveralls
+- if [[ -z $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+      pip install tox; pip install tox-travis;
+  fi
 script:
-    - tox
-after_success:
-    - if [ "$TRAVIS_BRANCH" = "master" ]; then pip install pycurl requests && contrib/make_locale; fi
-    - coveralls
+- if [[ -z $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]];then
+      tox;
+  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then
+      ./build/travis-build-osx.sh ;
+  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then
+      ./build/travis-build-linux.sh;
+  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then
+      ./build/travis-build-linux-apk.sh;
+  fi
+deploy:
+- provider: releases
+  api_key:
+    secure: ipcWAaqrPrgXX+L86AEq/VkfJ81j3RvDF1b+BUcPCmU/HB0UE6Eg8TTtGZ/LPZXUfcsmhLCS9zinwSh8HTYjJ1fd+yVv7V7xFrp1vRuxTE06JNwPETOOZRAk/sMlOfKU2T0rw8iyW4qhfCHO0r6Dqmb6/0psARrq0bxihKWfI+eemVLdMJPzCJABSwKOrPWK01j6FCehvlPyFnRy/Ti0sAy8JYSJ/r+ICN08qHZTVrskquEE/Bds9E3Js3Jc/tZSCPhw+/u6t34zVnFAGvEnhcgHZFDuooCl2BR02jBNpkgjHSjGUEDjom85J+FKRAg+9mDU+wH9X0s+uf4O+AIVQH4COhWjbcqviX+PyHzG8kT6uVnIj39yLmgIAhDXVfjVgy8lfb8M6pS1ajhZB1C4fwHU6ef98xk4BhTlWbex6nvko5cy8lituezfD8U8JQhbv4KSz+xRpOIspUXj1KnHTaJhBEizxFi60MX+mlKRXeKIpSqveEPZnKuqkpnOb3K8BTM8Ca2UjYagasrV7ix4w+SCAmAjF+Tdtqf8LMht1mSn+zeB32ZsnyWnL74HPWqw6/StdlS5HSxlvmfl2UnxH77e5EPGNI0KGUPG6vQcUxBg9B1tv7iruNgYJThT54sE3zWy+6eFJy5XCGkZuiS2ETiL31h+9CEwGWRsR6L6+tA=
+  file:
+  - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-macosx.dmg
+  on:
+    repo: zebra-lucky/electrum-zcash
+    tags: true
+    condition: "$TRAVIS_OS_NAME = osx"
+- provider: releases
+  api_key:
+    secure: ipcWAaqrPrgXX+L86AEq/VkfJ81j3RvDF1b+BUcPCmU/HB0UE6Eg8TTtGZ/LPZXUfcsmhLCS9zinwSh8HTYjJ1fd+yVv7V7xFrp1vRuxTE06JNwPETOOZRAk/sMlOfKU2T0rw8iyW4qhfCHO0r6Dqmb6/0psARrq0bxihKWfI+eemVLdMJPzCJABSwKOrPWK01j6FCehvlPyFnRy/Ti0sAy8JYSJ/r+ICN08qHZTVrskquEE/Bds9E3Js3Jc/tZSCPhw+/u6t34zVnFAGvEnhcgHZFDuooCl2BR02jBNpkgjHSjGUEDjom85J+FKRAg+9mDU+wH9X0s+uf4O+AIVQH4COhWjbcqviX+PyHzG8kT6uVnIj39yLmgIAhDXVfjVgy8lfb8M6pS1ajhZB1C4fwHU6ef98xk4BhTlWbex6nvko5cy8lituezfD8U8JQhbv4KSz+xRpOIspUXj1KnHTaJhBEizxFi60MX+mlKRXeKIpSqveEPZnKuqkpnOb3K8BTM8Ca2UjYagasrV7ix4w+SCAmAjF+Tdtqf8LMht1mSn+zeB32ZsnyWnL74HPWqw6/StdlS5HSxlvmfl2UnxH77e5EPGNI0KGUPG6vQcUxBg9B1tv7iruNgYJThT54sE3zWy+6eFJy5XCGkZuiS2ETiL31h+9CEwGWRsR6L6+tA=
+  file:
+  - build/electrum-zcash/dist/Electrum-Zcash-$ELECTRUM_ZCASH_VERSION.tar.gz
+  - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-setup-win32.exe
+  - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-setup-win64.exe
+  - build/electrum-zcash/bin/Electrum_Zcash-$ELECTRUM_ZCASH_APK_VERSION-release-unsigned.apk
+  on:
+    repo: zebra-lucky/electrum-zcash
+    tags: true
+    condition: "$TRAVIS_OS_NAME = linux"
+notifications:
+  slack:
+    secure: g2tFyXklhL4WOD/jQ8nxiOBqVv2F26iE4aVgvpclQ/9Fnh6jXEk3jCXyMqt39fcbB4Hka2wPr4n5uWH3tRaChFpwK5LQS5vuymllloqdxAShgIXXciZ1k/Ka1K+mxMEPJriQm4MT5AvzcLVSkJ0i5LYW8nWgG7+fTEullWS4hlPLC77C36iK2CWDaxfFqqe8oPTdsCVbik8HQ62ZWDM6Sh6TZbQD7F9eUBmiwwQhRB2BMxPkWghwQ//FRJ+PIpg7PtWRru/JjNg3adOsHnwlltqUVAolacZCbpxDKFR+GLpYmLkMrwdnVA7apZ2In/yo25ByAkxshCgw45lmGB0dtC1zeAe3Get9eGP5w3o9Zedj5T5esX0BNArDK70C+kTXcPeJaRRQJPrs5OYXRPKjD+uiJqe1fIFSmhdM6vvuMPdyA1z0Fd0/9G2O/Qi8tFxcFmM8n6JQGfD9ojOQF8fPYcHM9gsOgNU9J2PfV3RnRtv3VZogxs4azKG2M8JhD/lwqZBNi4FgdllW6NE7+5TB2KX07xy/zx0m81u8k6J228sAuiRsUBcpmW7pqlqLIENMzwV8pDcA93Ps0EWJKWbzRi+hIEkBnaFE9WHY0GcKuW0TCrnonZ4FOnJNO/G9HzxvQ97bcJDvhUloJ2pBBsH0P4IZ1RlDXFpc5DqTT2qxZSo=
