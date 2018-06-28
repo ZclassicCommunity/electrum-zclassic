@@ -984,14 +984,15 @@ class Network(util.DaemonThread):
     def init_headers_file(self):
         b = self.blockchains[0]
         filename = b.path()
-        length = HDR_LEN * len(constants.net.CHECKPOINTS) * CHUNK_LEN
+        len_checkpoints = len(constants.net.CHECKPOINTS)
+        length = HDR_LEN * len_checkpoints * CHUNK_LEN
         if not os.path.exists(filename) or os.path.getsize(filename) < length:
             with open(filename, 'wb') as f:
-                if length > 0:
-                    for height, hd in b.checkpoints[-1][2]:
-                        f.seek(height*80)
-                        bd = bfh(hd)
-                        f.write(bd)
+                for i in range(len_checkpoints):
+                    for height, header_data in b.checkpoints[i][2]:
+                        f.seek(height*HDR_LEN)
+                        bin_header = bfh(header_data)
+                        f.write(bin_header)
         with b.lock:
             b.update_size()
 

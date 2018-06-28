@@ -39,6 +39,8 @@ POW_MAX_ADJUST_UP = 16
 POW_DAMPING_FACTOR = 4
 POW_TARGET_SPACING = 150
 
+TARGET_CALC_BLOCKS = POW_AVERAGING_WINDOW + POW_MEDIAN_BLOCK_SPAN
+
 AVERAGING_WINDOW_TIMESPAN = POW_AVERAGING_WINDOW * POW_TARGET_SPACING
 
 MIN_ACTUAL_TIMESPAN = AVERAGING_WINDOW_TIMESPAN * \
@@ -302,18 +304,14 @@ class Blockchain(util.PrintError):
         return deserialize_header(h, height)
 
     def get_hash(self, height):
-        len_checkpoints = len(self.checkpoints)
         if height == -1:
             return '0000000000000000000000000000000000000000000000000000000000000000'
         elif height == 0:
             return constants.net.GENESIS
-        elif height < len_checkpoints * CHUNK_LEN - POW_AVERAGING_WINDOW:
+        elif height < len(self.checkpoints) * CHUNK_LEN - TARGET_CALC_BLOCKS:
             assert (height+1) % CHUNK_LEN == 0, height
             index = height // CHUNK_LEN
-            if index < len_checkpoints - 1:
-                h, t = self.checkpoints[index]
-            else:
-                h, t, extra_headers = self.checkpoints[index]
+            h, t, extra_headers = self.checkpoints[index]
             return h
         else:
             return hash_header(self.read_header(height))
@@ -334,7 +332,8 @@ class Blockchain(util.PrintError):
             if not header and not chunk_empty \
                 and min_height <= h <= max_height:
                     header = chunk_headers[h]
-            assert header and header.get('block_height') == h
+            if not header:
+                raise Exception("Can not read header at height %s" % h)
             median.append(header.get('timestamp'))
 
         median.sort()
@@ -359,7 +358,8 @@ class Blockchain(util.PrintError):
             if not header and not chunk_empty \
                 and min_height <= h <= max_height:
                     header = chunk_headers[h]
-            assert header and header.get('block_height') == h
+            if not header:
+                raise Exception("Can not read header at height %s" % h)
             mean_target += self.bits_to_target(header.get('bits'))
         mean_target //= POW_AVERAGING_WINDOW
 
@@ -442,20 +442,17 @@ class Blockchain(util.PrintError):
             target = self.get_target(height)
             if len(h.strip('0')) == 0:
                 raise Exception('%s file has not enough data.' % self.path())
-            if index < n - 1:
-                cp.append((h, target))
-            else:
-                dgw3_headers = []
-                if os.path.exists(self.path()):
-                    with open(self.path(), 'rb') as f:
-                        lower_header = height - POW_AVERAGING_WINDOW
-                        for height in range(height, lower_header-1, -1):
-                            f.seek(height*80)
-                            hd = f.read(80)
-                            if len(hd) < 80:
-                                raise Exception(
-                                    'Expected to read a full header.'
-                                    ' This was only {} bytes'.format(len(hd)))
-                            dgw3_headers.append((height, bh2u(hd)))
-                cp.append((h, target, dgw3_headers))
+            extra_headers = []
+            if os.path.exists(self.path()):
+                with open(self.path(), 'rb') as f:
+                    lower_header = height - TARGET_CALC_BLOCKS
+                    for height in range(height, lower_header-1, -1):
+                        f.seek(height*HDR_LEN)
+                        hd = f.read(HDR_LEN)
+                        if len(hd) < HDR_LEN:
+                            raise Exception(
+                                'Expected to read a full header.'
+                                ' This was only {} bytes'.format(len(hd)))
+                        extra_headers.append((height, bh2u(hd)))
+            cp.append((h, target, extra_headers))
         return cp
