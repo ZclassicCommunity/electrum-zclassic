@@ -828,7 +828,7 @@ class Abstract_Wallet(PrintError):
             # BUT we track is_mine inputs in a txn, and during subsequent calls
             # of add_transaction tx, we might learn of more-and-more inputs of
             # being is_mine, as we roll the gap_limit forward
-            is_coinbase = tx.inputs()[0]['type'] == 'coinbase'
+            is_coinbase = len(tx.inputs()) and tx.inputs()[0]['type'] == 'coinbase'
             tx_height = self.get_tx_height(tx_hash)[0]
             is_mine = any([self.is_mine(txin['address']) for txin in tx.inputs()])
             # do not save if tx is local and not mine
