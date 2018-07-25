@@ -42,7 +42,6 @@ datas = [
     ('lib/servers_testnet.json', 'electrum_zcash'),
     ('lib/servers_regtest.json', 'electrum_zcash'),
     ('lib/currencies.json', 'electrum_zcash'),
-    ('lib/checkpoints.json', 'electrum_zcash'),
     ('lib/locale', 'electrum_zcash/locale'),
     ('lib/wordlist', 'electrum_zcash/wordlist'),
     ('C:\\zbarw', '.'),
