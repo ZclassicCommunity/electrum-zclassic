@@ -84,6 +84,6 @@ setup(
     author="Thomas Voegtlin",
     author_email="thomasv@electrum.org",
     license="MIT License",
-    url="https://electrum-zcash.org",
+    url="https://github.com/zebra-lucky/electrum-zcash",
     long_description="""Lightweight Zcash Wallet"""
 )

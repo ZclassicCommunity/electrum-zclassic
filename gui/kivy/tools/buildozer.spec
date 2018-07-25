@@ -7,7 +7,7 @@ title = Electrum-Zcash
 package.name = Electrum-Zcash
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.electrum-zcash
+package.domain = cash.z.electrum
 
 # (str) Source code where the main.py live
 source.dir = .
