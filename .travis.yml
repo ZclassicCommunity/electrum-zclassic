@@ -1,7 +1,5 @@
 sudo: required
 language: python
-services:
-- docker
 addons:
   apt:
     packages:
@@ -15,7 +13,10 @@ matrix:
     osx_image: xcode7.3
   - os: linux
     python: "3.4"
-  - os: linux
+    services:
+    - docker
+  - if: NOT tag =~ .+
+    os: linux
     python: "3.5"
   - if: NOT tag =~ .+
     os: linux
@@ -53,7 +54,7 @@ script:
 deploy:
 - provider: releases
   api_key:
-    secure: ipcWAaqrPrgXX+L86AEq/VkfJ81j3RvDF1b+BUcPCmU/HB0UE6Eg8TTtGZ/LPZXUfcsmhLCS9zinwSh8HTYjJ1fd+yVv7V7xFrp1vRuxTE06JNwPETOOZRAk/sMlOfKU2T0rw8iyW4qhfCHO0r6Dqmb6/0psARrq0bxihKWfI+eemVLdMJPzCJABSwKOrPWK01j6FCehvlPyFnRy/Ti0sAy8JYSJ/r+ICN08qHZTVrskquEE/Bds9E3Js3Jc/tZSCPhw+/u6t34zVnFAGvEnhcgHZFDuooCl2BR02jBNpkgjHSjGUEDjom85J+FKRAg+9mDU+wH9X0s+uf4O+AIVQH4COhWjbcqviX+PyHzG8kT6uVnIj39yLmgIAhDXVfjVgy8lfb8M6pS1ajhZB1C4fwHU6ef98xk4BhTlWbex6nvko5cy8lituezfD8U8JQhbv4KSz+xRpOIspUXj1KnHTaJhBEizxFi60MX+mlKRXeKIpSqveEPZnKuqkpnOb3K8BTM8Ca2UjYagasrV7ix4w+SCAmAjF+Tdtqf8LMht1mSn+zeB32ZsnyWnL74HPWqw6/StdlS5HSxlvmfl2UnxH77e5EPGNI0KGUPG6vQcUxBg9B1tv7iruNgYJThT54sE3zWy+6eFJy5XCGkZuiS2ETiL31h+9CEwGWRsR6L6+tA=
+    secure: G+TcxPJSQQ2bTNhkTX4aofnsiNFrzbuFTGty/+jIKDb/IQ69etXS9Ulu8KGD71VjEdXugFWdus+2a8fFSCSg79+AvrSxKa1ztXQ2q6tmovRkUcnF5Bkbc+ORLm3+FMZhonvMg+MLnHS3hnvJL/CZU0Pn2dkfODn7/t+MsGs99MN0G44qimq+FCu+YHaKVcGgiTs1I6nextIH+lnPw5qE6VxTQKdFp4PTHqY1qZJWamReVvtyMnfGpa+QwcKf43dXzZrHMLfFprfzEi1DExrhRi0a8RZlFWmAtkwH9zzJXzqOEmivniLfeALJzWkBJG4I2Fu7QSQhvPllhnt5uGdV3pgmHZUxL1DZckrqVG5b6P/Cnmbu0hWXbkPpZ7sXQ4X7wGhAVgH2sRPF1SfE9XvqDsmKvpspdKGmI+9yKoaWekbt8igfJ8jRBK4yRJAt+F/waeXkj7HJhSPIYg9wNvYCnCmoih4brRcTE4nyJBo/ySY3DVocflS3QGoClOrBpwXGgzwaUzBamRhJeCUe9ockPJyUs9DkuBIdsPfhq0nZfZFMhNBtpzm1hPGE92NojUi+DcI12WqweUqDWZzY/02MmfHLeN6mGgjTWvgOwnq1fvc6s7sVy7nANtA6UseWF2KUBYfuMKAxTU4WadpZ102znz4XiL4B7TILKJMU+Ht+a+c=
   file:
   - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-macosx.dmg
   on:
@@ -62,7 +63,7 @@ deploy:
     condition: "$TRAVIS_OS_NAME = osx"
 - provider: releases
   api_key:
-    secure: ipcWAaqrPrgXX+L86AEq/VkfJ81j3RvDF1b+BUcPCmU/HB0UE6Eg8TTtGZ/LPZXUfcsmhLCS9zinwSh8HTYjJ1fd+yVv7V7xFrp1vRuxTE06JNwPETOOZRAk/sMlOfKU2T0rw8iyW4qhfCHO0r6Dqmb6/0psARrq0bxihKWfI+eemVLdMJPzCJABSwKOrPWK01j6FCehvlPyFnRy/Ti0sAy8JYSJ/r+ICN08qHZTVrskquEE/Bds9E3Js3Jc/tZSCPhw+/u6t34zVnFAGvEnhcgHZFDuooCl2BR02jBNpkgjHSjGUEDjom85J+FKRAg+9mDU+wH9X0s+uf4O+AIVQH4COhWjbcqviX+PyHzG8kT6uVnIj39yLmgIAhDXVfjVgy8lfb8M6pS1ajhZB1C4fwHU6ef98xk4BhTlWbex6nvko5cy8lituezfD8U8JQhbv4KSz+xRpOIspUXj1KnHTaJhBEizxFi60MX+mlKRXeKIpSqveEPZnKuqkpnOb3K8BTM8Ca2UjYagasrV7ix4w+SCAmAjF+Tdtqf8LMht1mSn+zeB32ZsnyWnL74HPWqw6/StdlS5HSxlvmfl2UnxH77e5EPGNI0KGUPG6vQcUxBg9B1tv7iruNgYJThT54sE3zWy+6eFJy5XCGkZuiS2ETiL31h+9CEwGWRsR6L6+tA=
+    secure: G+TcxPJSQQ2bTNhkTX4aofnsiNFrzbuFTGty/+jIKDb/IQ69etXS9Ulu8KGD71VjEdXugFWdus+2a8fFSCSg79+AvrSxKa1ztXQ2q6tmovRkUcnF5Bkbc+ORLm3+FMZhonvMg+MLnHS3hnvJL/CZU0Pn2dkfODn7/t+MsGs99MN0G44qimq+FCu+YHaKVcGgiTs1I6nextIH+lnPw5qE6VxTQKdFp4PTHqY1qZJWamReVvtyMnfGpa+QwcKf43dXzZrHMLfFprfzEi1DExrhRi0a8RZlFWmAtkwH9zzJXzqOEmivniLfeALJzWkBJG4I2Fu7QSQhvPllhnt5uGdV3pgmHZUxL1DZckrqVG5b6P/Cnmbu0hWXbkPpZ7sXQ4X7wGhAVgH2sRPF1SfE9XvqDsmKvpspdKGmI+9yKoaWekbt8igfJ8jRBK4yRJAt+F/waeXkj7HJhSPIYg9wNvYCnCmoih4brRcTE4nyJBo/ySY3DVocflS3QGoClOrBpwXGgzwaUzBamRhJeCUe9ockPJyUs9DkuBIdsPfhq0nZfZFMhNBtpzm1hPGE92NojUi+DcI12WqweUqDWZzY/02MmfHLeN6mGgjTWvgOwnq1fvc6s7sVy7nANtA6UseWF2KUBYfuMKAxTU4WadpZ102znz4XiL4B7TILKJMU+Ht+a+c=
   file:
   - build/electrum-zcash/dist/Electrum-Zcash-$ELECTRUM_ZCASH_VERSION.tar.gz
   - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-setup-win32.exe
@@ -72,6 +73,3 @@ deploy:
     repo: zebra-lucky/electrum-zcash
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"
-notifications:
-  slack:
-    secure: g2tFyXklhL4WOD/jQ8nxiOBqVv2F26iE4aVgvpclQ/9Fnh6jXEk3jCXyMqt39fcbB4Hka2wPr4n5uWH3tRaChFpwK5LQS5vuymllloqdxAShgIXXciZ1k/Ka1K+mxMEPJriQm4MT5AvzcLVSkJ0i5LYW8nWgG7+fTEullWS4hlPLC77C36iK2CWDaxfFqqe8oPTdsCVbik8HQ62ZWDM6Sh6TZbQD7F9eUBmiwwQhRB2BMxPkWghwQ//FRJ+PIpg7PtWRru/JjNg3adOsHnwlltqUVAolacZCbpxDKFR+GLpYmLkMrwdnVA7apZ2In/yo25ByAkxshCgw45lmGB0dtC1zeAe3Get9eGP5w3o9Zedj5T5esX0BNArDK70C+kTXcPeJaRRQJPrs5OYXRPKjD+uiJqe1fIFSmhdM6vvuMPdyA1z0Fd0/9G2O/Qi8tFxcFmM8n6JQGfD9ojOQF8fPYcHM9gsOgNU9J2PfV3RnRtv3VZogxs4azKG2M8JhD/lwqZBNi4FgdllW6NE7+5TB2KX07xy/zx0m81u8k6J228sAuiRsUBcpmW7pqlqLIENMzwV8pDcA93Ps0EWJKWbzRi+hIEkBnaFE9WHY0GcKuW0TCrnonZ4FOnJNO/G9HzxvQ97bcJDvhUloJ2pBBsH0P4IZ1RlDXFpc5DqTT2qxZSo=
