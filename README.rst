@@ -9,7 +9,7 @@ Electrum-Zcash - Lightweight Zcash client
   Homepage: https://github.com/zebra-lucky/electrum-zcash
 
 
-.. image:: https://travis-ci.org/zebra-lucky.svg?branch=master
+.. image:: https://travis-ci.org/zebra-lucky/electrum-zcash.svg?branch=master
     :target: https://travis-ci.org/zebra-lucky/electrum-zcash
     :alt: Build Status
 
