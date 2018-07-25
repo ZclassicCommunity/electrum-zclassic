@@ -16,9 +16,12 @@ from electrum_zcash.paymentrequest import PR_UNPAID, PR_PAID, PR_EXPIRED
 
 
 if platform.system() == 'Windows':
-    MONOSPACE_FONT = 'Lucida Console'
+    if platform.release() in ['7', '8', '10']:
+        MONOSPACE_FONT = 'Consolas'
+    else:
+        MONOSPACE_FONT = 'Lucida Console'
 elif platform.system() == 'Darwin':
-    MONOSPACE_FONT = 'Monaco'
+    MONOSPACE_FONT = 'Menlo'
 else:
     MONOSPACE_FONT = 'monospace'
 
