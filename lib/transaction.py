@@ -44,6 +44,8 @@ from pyblake2 import blake2b
 NO_SIGNATURE = 'ff'
 OVERWINTERED_VERSION_GROUP_ID = 0x03C48270
 OVERWINTER_BRANCH_ID = 0x5BA81B19
+SAPLING_VERSION_GROUP_ID = 0x892F2085
+SAPLING_BRANCH_ID = 0x76B809BB
 
 
 class TransactionVersionError(Exception):
@@ -484,11 +486,12 @@ def deserialize(raw):
     version = header & 0x7FFFFFFF
 
     if overwintered:
-        if version != 3:
+        if version not in [3, 4]:
             raise TransactionVersionError('Overwintered transaction'
                                           ' with invalid version=%d' % version)
         ver_group_id = vds.read_uint32()
-        if ver_group_id != OVERWINTERED_VERSION_GROUP_ID:
+        if (version == 3 and ver_group_id != OVERWINTERED_VERSION_GROUP_ID or
+            version == 4 and ver_group_id != SAPLING_VERSION_GROUP_ID):
             raise TransactionVersionError('Overwintered transaction with wrong'
                                           ' versionGroupId=%X' % ver_group_id)
         d['versionGroupId'] = ver_group_id
@@ -505,12 +508,25 @@ def deserialize(raw):
     if overwintered:
         d['expiryHeight'] = vds.read_uint32()
 
-    if version >= 2 and len_raw > vds.read_cursor:
+        if version == 4:
+            d['valueBalance'] = vds.read_int64()
+            n_sh_sp = vds.read_compact_size()
+            if n_sh_sp > 0:
+                d['shieldedSpends'] = vds.read_bytes(n_sh_sp*384)
+            n_sh_out = vds.read_compact_size()
+            if n_sh_out > 0:
+                d['shieldedOutputs'] = vds.read_bytes(n_sh_out*948)
+
         n_js = vds.read_compact_size()
         if n_js > 0:
-            d['joinSplits'] = [parse_join_split(vds) for i in range(n_js)]
+            if version == 3:
+                d['joinSplits'] = [parse_join_split(vds) for i in range(n_js)]
+            else:
+                d['joinSplits'] = vds.read_bytes(n_js*1698)
             d['joinSplitPubKey'] = vds.read_bytes(32)
             d['joinSplitSig'] = vds.read_bytes(64)
+            if version == 4:
+                d['bindingSig'] = vds.read_bytes(64)
 
     return d
 
@@ -550,13 +566,17 @@ class Transaction:
         self._inputs = None
         self._outputs = None
         self.locktime = 0
-        self.version = 3
+        self.version = 4
         self.overwintered = True
-        self.versionGroupId = OVERWINTERED_VERSION_GROUP_ID
+        self.versionGroupId = SAPLING_VERSION_GROUP_ID
         self.expiryHeight = 0
+        self.valueBalance = 0
+        self.shieldedSpends = None
+        self.shieldedOutputs = None
         self.joinSplits = None
         self.joinSplitPubKey = None
         self.joinSplitSig = None
+        self.bindingSig = None
 
     def update(self, raw):
         self.raw = raw
@@ -629,10 +649,14 @@ class Transaction:
         self.version = d['version']
         self.overwintered = d['overwintered']
         self.versionGroupId = d.get('versionGroupId')
-        self.expiryHeight = d.get('expiryHeight')
+        self.expiryHeight = d.get('expiryHeight', 0)
+        self.valueBalance = d.get('valueBalance', 0)
+        self.shieldedSpends = d.get('shieldedSpends')
+        self.shieldedOutputs = d.get('shieldedOutputs')
         self.joinSplits = d.get('joinSplits')
         self.joinSplitPubKey = d.get('joinSplitPubKey')
         self.joinSplitSig = d.get('joinSplitSig')
+        self.bindingSig = d.get('bindingSig')
         return d
 
     @classmethod
@@ -816,13 +840,17 @@ class Transaction:
             s_outputs = bfh(''.join(self.serialize_output(o) for o in outputs))
             hashOutputs = blake2b(s_outputs, digest_size=32, person=b'ZcashOutputsHash').hexdigest()
             joinSplits = self.joinSplits
-            if joinSplits is None:
-                hashJoinSplits = '00'*32
-            else:
-                s_joinSplits = bfh(''.join(self.serialize_join_split(j) for j in joinSplits))
-                s_joinSplits += self.joinSplitPubKey
-                hashJoinSplits = blake2b(s_joinSplits, digest_size=32, person=b'ZcashJSplitsHash').hexdigest()
+            #if joinSplits is None:
+            #    hashJoinSplits = '00'*32
+            #else:
+            #    s_joinSplits = bfh(''.join(self.serialize_join_split(j) for j in joinSplits))
+            #    s_joinSplits += self.joinSplitPubKey
+            #    hashJoinSplits = blake2b(s_joinSplits, digest_size=32, person=b'ZcashJSplitsHash').hexdigest()
+            hashJoinSplits = '00'*32
+            hashShieldedSpends = '00'*32
+            hashShieldedOutputs = '00'*32
             nExpiryHeight = int_to_hex(self.expiryHeight, 4)
+            nValueBalance = int_to_hex(self.valueBalance, 8)
 
             txin = inputs[i]
 
@@ -830,7 +858,8 @@ class Transaction:
             scriptCode = var_int(len(preimage_script) // 2) + preimage_script
             preimage = (
                 nHeader + nVersionGroupId + hashPrevouts + hashSequence + hashOutputs
-                + hashJoinSplits + nLocktime + nExpiryHeight + nHashType
+                + hashJoinSplits + hashShieldedSpends + hashShieldedOutputs + nLocktime
+                + nExpiryHeight + nValueBalance + nHashType
                 + self.serialize_outpoint(txin)
                 + scriptCode
                 + int_to_hex(txin['value'], 8)
@@ -854,7 +883,9 @@ class Transaction:
             nVersion = int_to_hex(0x80000000 | self.version, 4)
             nVersionGroupId = int_to_hex(self.versionGroupId, 4)
             nExpiryHeight = int_to_hex(self.expiryHeight, 4)
-            return nVersion + nVersionGroupId + txins + txouts + nLocktime + nExpiryHeight + '00'
+            nValueBalance = int_to_hex(self.valueBalance, 8)
+            return (nVersion + nVersionGroupId + txins + txouts + nLocktime
+                    + nExpiryHeight + nValueBalance + '00' + '00' + '00')
         else:
             return nVersion + txins + txouts + nLocktime
 
@@ -962,7 +993,7 @@ class Transaction:
                     # add signature
                     if self.overwintered:
                         data = bfh(self.serialize_preimage(i))
-                        person = b'ZcashSigHash' + OVERWINTER_BRANCH_ID.to_bytes(4, 'little')
+                        person = b'ZcashSigHash' + SAPLING_BRANCH_ID.to_bytes(4, 'little')
                         pre_hash = blake2b(data, digest_size=32, person=person).digest()
                     else:
                         pre_hash = Hash(bfh(self.serialize_preimage(i)))
