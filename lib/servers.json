@@ -1,8 +1,8 @@
 {
-    "localhost": {
+    "electrum.zclcore.com": {
         "pruning": "-",
-        "s": "50022",
-        "t": "50021",
+        "s": "50002",
+        "t": "50001",
         "version": "1.2"
     }
 }

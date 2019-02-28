@@ -6,15 +6,15 @@ if [[ -z $TRAVIS_TAG ]]; then
   exit 1
 fi
 
-BUILD_REPO_URL=https://github.com/zebra-lucky/electrum-zcash
+BUILD_REPO_URL=https://github.com/zebra-lucky/electrum-zclassic
 
 cd build
 
-git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-zcash
+git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-zclassic
 
 docker run --rm \
     -v $(pwd):/opt \
-    -w /opt/electrum-zcash \
+    -w /opt/electrum-zclassic \
     -t zebralucky/electrum-dash-winebuild:Linux /opt/build_linux.sh
 
 sudo find . -name '*.po' -delete
@@ -34,8 +34,8 @@ docker run --rm \
     -e WINEPREFIX=$WINEPREFIX \
     -e PYHOME=$PYHOME \
     -v $(pwd):/opt \
-    -v $(pwd)/electrum-zcash/:$WINEPREFIX/drive_c/electrum-zcash \
-    -w /opt/electrum-zcash \
+    -v $(pwd)/electrum-zclassic/:$WINEPREFIX/drive_c/electrum-zclassic \
+    -w /opt/electrum-zclassic \
     -t zebralucky/electrum-dash-winebuild:Wine /opt/build_wine.sh
 
 export WINEARCH=win64
@@ -50,6 +50,6 @@ docker run --rm \
     -e WINEPREFIX=$WINEPREFIX \
     -e PYHOME=$PYHOME \
     -v $(pwd):/opt \
-    -v $(pwd)/electrum-zcash/:$WINEPREFIX/drive_c/electrum-zcash \
-    -w /opt/electrum-zcash \
+    -v $(pwd)/electrum-zclassic/:$WINEPREFIX/drive_c/electrum-zclassic \
+    -w /opt/electrum-zclassic \
     -t zebralucky/electrum-dash-winebuild:Wine /opt/build_wine.sh

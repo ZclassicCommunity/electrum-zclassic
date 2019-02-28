@@ -28,7 +28,7 @@ import sys
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
 is_bundle = getattr(sys, 'frozen', False)
-is_local = not is_bundle and os.path.exists(os.path.join(script_dir, "electrum-zcash.desktop"))
+is_local = not is_bundle and os.path.exists(os.path.join(script_dir, "electrum-zclassic.desktop"))
 is_android = 'ANDROID_DATA' in os.environ
 
 # move this back to gui/kivy/__init.py once plugins are moved
@@ -67,24 +67,24 @@ if not is_android:
 # load local module as electrum
 if is_local or is_android:
     import imp
-    imp.load_module('electrum_zcash', *imp.find_module('lib'))
-    imp.load_module('electrum_zcash_gui', *imp.find_module('gui'))
-    imp.load_module('electrum_zcash_plugins', *imp.find_module('plugins'))
+    imp.load_module('electrum_zclassic', *imp.find_module('lib'))
+    imp.load_module('electrum_zclassic_gui', *imp.find_module('gui'))
+    imp.load_module('electrum_zclassic_plugins', *imp.find_module('plugins'))
 
 
 
-from electrum_zcash import bitcoin, util
-from electrum_zcash import constants
-from electrum_zcash import SimpleConfig, Network
-from electrum_zcash.wallet import Wallet, Imported_Wallet
-from electrum_zcash.storage import WalletStorage, get_derivation_used_for_hw_device_encryption
-from electrum_zcash.util import print_msg, print_stderr, json_encode, json_decode, UserCancelled
-from electrum_zcash.util import set_verbosity, InvalidPassword
-from electrum_zcash.commands import get_parser, known_commands, Commands, config_variables
-from electrum_zcash import daemon
-from electrum_zcash import keystore
-from electrum_zcash.mnemonic import Mnemonic
-import electrum_zcash_plugins
+from electrum_zclassic import bitcoin, util
+from electrum_zclassic import constants
+from electrum_zclassic import SimpleConfig, Network
+from electrum_zclassic.wallet import Wallet, Imported_Wallet
+from electrum_zclassic.storage import WalletStorage, get_derivation_used_for_hw_device_encryption
+from electrum_zclassic.util import print_msg, print_stderr, json_encode, json_decode, UserCancelled
+from electrum_zclassic.util import set_verbosity, InvalidPassword
+from electrum_zclassic.commands import get_parser, known_commands, Commands, config_variables
+from electrum_zclassic import daemon
+from electrum_zclassic import keystore
+from electrum_zclassic.mnemonic import Mnemonic
+import electrum_zclassic_plugins
 
 # get password routine
 def prompt_password(prompt, confirm=True):
@@ -178,7 +178,7 @@ def init_daemon(config_options):
     storage = WalletStorage(config.get_wallet_path())
     if not storage.file_exists():
         print_msg("Error: Wallet file not found.")
-        print_msg("Type 'electrum-zcash create' to create a new wallet, or provide a path to a wallet with the -w option")
+        print_msg("Type 'electrum-zclassic create' to create a new wallet, or provide a path to a wallet with the -w option")
         sys.exit(0)
     if storage.is_encrypted():
         if storage.is_encrypted_with_hw_device():
@@ -216,7 +216,7 @@ def init_cmdline(config_options, server):
 
     if cmd.requires_wallet and not storage.file_exists():
         print_msg("Error: Wallet file not found.")
-        print_msg("Type 'electrum-zcash create' to create a new wallet, or provide a path to a wallet with the -w option")
+        print_msg("Type 'electrum-zclassic create' to create a new wallet, or provide a path to a wallet with the -w option")
         sys.exit(0)
 
     # important warning
@@ -329,7 +329,7 @@ def run_offline_command(config, config_options, plugins):
     return result
 
 def init_plugins(config, gui_name):
-    from electrum_zcash.plugins import Plugins
+    from electrum_zclassic.plugins import Plugins
     return Plugins(config, is_local or is_android, gui_name)
 
 
@@ -390,7 +390,7 @@ if __name__ == '__main__':
     # check uri
     uri = config_options.get('url')
     if uri:
-        if not uri.startswith('zcash:'):
+        if not uri.startswith('zclassic:'):
             print_stderr('unknown command:', uri)
             sys.exit(1)
         config_options['url'] = uri
@@ -437,7 +437,7 @@ if __name__ == '__main__':
                 d = daemon.Daemon(config, fd, False)
                 d.start()
                 if config.get('websocket_server'):
-                    from electrum_zcash import websockets
+                    from electrum_zclassic import websockets
                     websockets.WebSocketServer(config, d.network).start()
                 if config.get('requests_dir'):
                     path = os.path.join(config.get('requests_dir'), 'index.html')
@@ -465,7 +465,7 @@ if __name__ == '__main__':
         else:
             cmd = known_commands[cmdname]
             if cmd.requires_network:
-                print_msg("Daemon not running; try 'electrum-zcash daemon start'")
+                print_msg("Daemon not running; try 'electrum-zclassic daemon start'")
                 sys.exit(1)
             else:
                 plugins = init_plugins(config, 'cmdline')

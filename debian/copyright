@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: electrum-zcash
-Source: https://github.com/zebra-lucky/electrum-zcash/
+Upstream-Name: electrum-zclassic
+Source: https://github.com/zebra-lucky/electrum-zclassic/
 
 Files: *
 Copyright: Electrum Team

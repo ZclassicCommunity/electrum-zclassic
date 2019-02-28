@@ -8,7 +8,7 @@ class NFCBase(Widget):
     '''
 
     payload = ObjectProperty(None)
-    '''This is the data gotten from the tag. 
+    '''This is the data gotten from the tag.
     '''
 
     def nfc_init(self):
@@ -41,4 +41,4 @@ class NFCBase(Widget):
 NFCScanner = core_select_lib('nfc_manager', (
     # keep the dummy implementation as the last one to make it the fallback provider.NFCScanner = core_select_lib('nfc_scanner', (
     ('android', 'scanner_android', 'ScannerAndroid'),
-    ('dummy', 'scanner_dummy', 'ScannerDummy')), True, 'electrum_zcash_gui.kivy')
+    ('dummy', 'scanner_dummy', 'ScannerDummy')), True, 'electrum_zclassic_gui.kivy')

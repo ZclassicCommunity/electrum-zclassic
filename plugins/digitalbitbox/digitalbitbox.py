@@ -4,16 +4,16 @@
 #
 
 try:
-    import electrum_zcash
-    from electrum_zcash.bitcoin import TYPE_ADDRESS, push_script, var_int, msg_magic, Hash, verify_message, pubkey_from_signature, point_to_ser, public_key_to_p2pkh, EncodeAES, DecodeAES, MyVerifyingKey
-    from electrum_zcash.bitcoin import serialize_xpub, deserialize_xpub
-    from electrum_zcash import constants
-    from electrum_zcash.transaction import Transaction
-    from electrum_zcash.i18n import _
-    from electrum_zcash.keystore import Hardware_KeyStore
+    import electrum_zclassic
+    from electrum_zclassic.bitcoin import TYPE_ADDRESS, push_script, var_int, msg_magic, Hash, verify_message, pubkey_from_signature, point_to_ser, public_key_to_p2pkh, EncodeAES, DecodeAES, MyVerifyingKey
+    from electrum_zclassic.bitcoin import serialize_xpub, deserialize_xpub
+    from electrum_zclassic import constants
+    from electrum_zclassic.transaction import Transaction
+    from electrum_zclassic.i18n import _
+    from electrum_zclassic.keystore import Hardware_KeyStore
     from ..hw_wallet import HW_PluginBase
-    from electrum_zcash.util import print_error, to_string, UserCancelled
-    from electrum_zcash.base_wizard import ScriptTypeNotSupported, HWD_SETUP_NEW_WALLET
+    from electrum_zclassic.util import print_error, to_string, UserCancelled
+    from electrum_zclassic.base_wizard import ScriptTypeNotSupported, HWD_SETUP_NEW_WALLET
 
     import time
     import hid
@@ -289,8 +289,8 @@ class DigitalBitbox_Client():
 
     def dbb_generate_wallet(self):
         key = self.stretch_key(self.password)
-        filename = ("Electrum-Zcash-" + time.strftime("%Y-%m-%d-%H-%M-%S") + ".pdf")
-        msg = ('{"seed":{"source": "create", "key": "%s", "filename": "%s", "entropy": "%s"}}' % (key, filename, 'Digital Bitbox Electrum-Zcash Plugin')).encode('utf8')
+        filename = ("Electrum-Zclassic-" + time.strftime("%Y-%m-%d-%H-%M-%S") + ".pdf")
+        msg = ('{"seed":{"source": "create", "key": "%s", "filename": "%s", "entropy": "%s"}}' % (key, filename, 'Digital Bitbox Electrum-Zclassic Plugin')).encode('utf8')
         reply = self.hid_send_encrypt(msg)
         if 'error' in reply:
             raise Exception(reply['error']['message'])

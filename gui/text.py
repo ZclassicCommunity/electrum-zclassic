@@ -3,10 +3,10 @@ import curses, datetime, locale
 from decimal import Decimal
 import getpass
 
-import electrum_zcash
-from electrum_zcash.util import format_satoshis, set_verbosity
-from electrum_zcash.bitcoin import is_address, COIN, TYPE_ADDRESS
-from electrum_zcash import Wallet, WalletStorage
+import electrum_zclassic
+from electrum_zclassic.util import format_satoshis, set_verbosity
+from electrum_zclassic.bitcoin import is_address, COIN, TYPE_ADDRESS
+from electrum_zclassic import Wallet, WalletStorage
 
 _ = lambda x:x
 
@@ -20,7 +20,7 @@ class ElectrumGui:
         self.network = daemon.network
         storage = WalletStorage(config.get_wallet_path())
         if not storage.file_exists():
-            print("Wallet not found. try 'electrum-zcash create'")
+            print("Wallet not found. try 'electrum-zclassic create'")
             exit()
         if storage.is_encrypted():
             password = getpass.getpass('Password:', stream=None)
@@ -320,7 +320,7 @@ class ElectrumGui:
 
     def do_send(self):
         if not is_address(self.str_recipient):
-            self.show_message(_('Invalid Zcash address'))
+            self.show_message(_('Invalid Zclassic address'))
             return
         try:
             amount = int(Decimal(self.str_amount) * COIN)
@@ -392,7 +392,7 @@ class ElectrumGui:
                         self.show_message("Error:" + server + "\nIn doubt, type \"auto-connect\"")
                         return False
             if out.get('server') or out.get('proxy'):
-                proxy = electrum_zcash.network.deserialize_proxy(out.get('proxy')) if out.get('proxy') else proxy_config
+                proxy = electrum_zclassic.network.deserialize_proxy(out.get('proxy')) if out.get('proxy') else proxy_config
                 self.network.set_parameters(host, port, protocol, proxy, auto_connect)
 
     def settings_dialog(self):

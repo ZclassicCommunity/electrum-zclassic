@@ -8,10 +8,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
-from electrum_zcash import Wallet, WalletStorage
-from electrum_zcash.util import UserCancelled, InvalidPassword
-from electrum_zcash.base_wizard import BaseWizard, HWD_SETUP_DECRYPT_WALLET
-from electrum_zcash.i18n import _
+from electrum_zclassic import Wallet, WalletStorage
+from electrum_zclassic.util import UserCancelled, InvalidPassword
+from electrum_zclassic.base_wizard import BaseWizard, HWD_SETUP_DECRYPT_WALLET
+from electrum_zclassic.i18n import _
 
 from .seed_dialog import SeedLayout, KeysLayout
 from .network_dialog import NetworkChoiceLayout
@@ -97,7 +97,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
     def __init__(self, config, app, plugins, storage):
         BaseWizard.__init__(self, config, storage)
         QDialog.__init__(self, None)
-        self.setWindowTitle('Electrum-Zcash  -  ' + _('Install Wizard'))
+        self.setWindowTitle('Electrum-Zclassic  -  ' + _('Install Wizard'))
         self.app = app
         self.config = config
         # Set for base base class
@@ -142,7 +142,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         hbox.setStretchFactor(scroll, 1)
         outer_vbox.addLayout(hbox)
         outer_vbox.addLayout(Buttons(self.back_button, self.next_button))
-        self.set_icon(':icons/electrum-zcash.png')
+        self.set_icon(':icons/electrum-zclassic.png')
         self.show()
         self.raise_()
         self.refresh_gui()  # Need for QT on MacOSX.  Lame.
@@ -169,7 +169,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         hbox2.addWidget(self.pw_e)
         hbox2.addStretch()
         vbox.addLayout(hbox2)
-        self.set_layout(vbox, title=_('Electrum-Zcash wallet'))
+        self.set_layout(vbox, title=_('Electrum-Zclassic wallet'))
 
         wallet_folder = os.path.dirname(self.storage.path)
 
@@ -276,7 +276,7 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         path = self.storage.path
         if self.storage.requires_split():
             self.hide()
-            msg = _("The wallet '{}' contains multiple accounts, which are no longer supported since Electrum-Zcash 2.7.\n\n"
+            msg = _("The wallet '{}' contains multiple accounts, which are no longer supported since Electrum-Zclassic 2.7.\n\n"
                     "Do you want to split your wallet into multiple files?").format(path)
             if not self.question(msg):
                 return
@@ -540,10 +540,10 @@ class InstallWizard(QDialog, MessageBoxMixin, BaseWizard):
         return None
 
     def init_network(self, network):
-        message = _("Electrum-Zcash communicates with remote servers to get "
+        message = _("Electrum-Zclassic communicates with remote servers to get "
                   "information about your transactions and addresses. The "
                   "servers all fulfill the same purpose only differing in "
-                  "hardware. In most cases you simply want to let Electrum-Zcash "
+                  "hardware. In most cases you simply want to let Electrum-Zclassic "
                   "pick one at random.  However if you prefer feel free to "
                   "select a server manually.")
         choices = [_("Auto connect"), _("Select server manually")]

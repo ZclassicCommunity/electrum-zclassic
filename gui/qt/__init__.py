@@ -38,15 +38,15 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import PyQt5.QtCore as QtCore
 
-from electrum_zcash.i18n import _, set_language
-from electrum_zcash.plugins import run_hook
-from electrum_zcash import WalletStorage
-# from electrum_zcash.synchronizer import Synchronizer
-# from electrum_zcash.verifier import SPV
-# from electrum_zcash.util import DebugMem
-from electrum_zcash.util import (UserCancelled, print_error,
+from electrum_zclassic.i18n import _, set_language
+from electrum_zclassic.plugins import run_hook
+from electrum_zclassic import WalletStorage
+# from electrum_zclassic.synchronizer import Synchronizer
+# from electrum_zclassic.verifier import SPV
+# from electrum_zclassic.util import DebugMem
+from electrum_zclassic.util import (UserCancelled, print_error,
                                 WalletFileException, BitcoinException)
-# from electrum_zcash.wallet import Abstract_Wallet
+# from electrum_zclassic.wallet import Abstract_Wallet
 
 from .installwizard import InstallWizard, GoBack
 
@@ -56,7 +56,7 @@ try:
 except Exception as e:
     print(e)
     print("Error: Could not find icons file.")
-    print("Please run 'pyrcc5 icons.qrc -o gui/qt/icons_rc.py', and reinstall Electrum-Zcash")
+    print("Please run 'pyrcc5 icons.qrc -o gui/qt/icons_rc.py', and reinstall Electrum-Zclassic")
     sys.exit(1)
 
 from .util import *   # * needed for plugins
@@ -97,7 +97,7 @@ class ElectrumGui:
         if hasattr(QtCore.Qt, "AA_ShareOpenGLContexts"):
             QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
         if hasattr(QGuiApplication, 'setDesktopFileName'):
-            QGuiApplication.setDesktopFileName('electrum-zcash.desktop')
+            QGuiApplication.setDesktopFileName('electrum-zclassic.desktop')
         self.config = config
         self.daemon = daemon
         self.plugins = plugins
@@ -111,7 +111,7 @@ class ElectrumGui:
         # init tray
         self.dark_icon = self.config.get("dark_icon", False)
         self.tray = QSystemTrayIcon(self.tray_icon(), None)
-        self.tray.setToolTip('Electrum-Zcash')
+        self.tray.setToolTip('Electrum-Zclassic')
         self.tray.activated.connect(self.tray_activated)
         self.build_tray_menu()
         self.tray.show()
@@ -133,7 +133,7 @@ class ElectrumGui:
             submenu.addAction(_("Close"), window.close)
         m.addAction(_("Dark/Light"), self.toggle_tray_icon)
         m.addSeparator()
-        m.addAction(_("Exit Electrum-Zcash"), self.close)
+        m.addAction(_("Exit Electrum-Zclassic"), self.close)
 
     def tray_icon(self):
         if self.dark_icon:
@@ -165,7 +165,7 @@ class ElectrumGui:
 
     def show_network_dialog(self, parent):
         if not self.daemon.network:
-            parent.show_warning(_('You are using Electrum-Zcash in offline mode; restart Electrum-Zcash if you want to get connected'), title=_('Offline'))
+            parent.show_warning(_('You are using Electrum-Zclassic in offline mode; restart Electrum-Zclassic if you want to get connected'), title=_('Offline'))
             return
         if self.nd:
             self.nd.on_update()

@@ -1,14 +1,14 @@
 from binascii import hexlify, unhexlify
 
-from electrum_zcash.util import bfh, bh2u
-from electrum_zcash.bitcoin import (b58_address_to_hash160, xpub_from_pubkey,
+from electrum_zclassic.util import bfh, bh2u
+from electrum_zclassic.bitcoin import (b58_address_to_hash160, xpub_from_pubkey,
                                     TYPE_ADDRESS, TYPE_SCRIPT)
-from electrum_zcash import constants
-from electrum_zcash.i18n import _
-from electrum_zcash.plugins import BasePlugin
-from electrum_zcash.transaction import deserialize, Transaction
-from electrum_zcash.keystore import Hardware_KeyStore, is_xpubkey, parse_xpubkey
-from electrum_zcash.base_wizard import ScriptTypeNotSupported
+from electrum_zclassic import constants
+from electrum_zclassic.i18n import _
+from electrum_zclassic.plugins import BasePlugin
+from electrum_zclassic.transaction import deserialize, Transaction
+from electrum_zclassic.keystore import Hardware_KeyStore, is_xpubkey, parse_xpubkey
+from electrum_zclassic.base_wizard import ScriptTypeNotSupported
 
 from ..hw_wallet import HW_PluginBase
 
@@ -134,7 +134,7 @@ class KeepKeyCompatiblePlugin(HW_PluginBase):
         return client
 
     def get_coin_name(self):
-        return "ZcashTestnet" if constants.net.TESTNET else "Zcash"
+        return "ZclassicTestnet" if constants.net.TESTNET else "Zclassic"
 
     def initialize_device(self, device_id, wizard, handler):
         # Initialization method

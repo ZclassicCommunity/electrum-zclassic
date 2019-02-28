@@ -1,0 +1,21 @@
+# If you want Electrum-Zclassic to appear in a Linux app launcher ("start menu"), install this by doing:
+# sudo desktop-file-install electrum-zclassic.desktop
+
+[Desktop Entry]
+Comment=Lightweight Zclassic Client
+Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\" electrum-zclassic %u"
+GenericName[en_US]=Zclassic Wallet
+GenericName=Zclassic Wallet
+Icon=electrum-zclassic.png
+Name[en_US]=Electrum-Zclassic Bitcoin Wallet
+Name=Electrum-Zclassic Bitcoin Wallet
+Categories=Finance;Network;
+StartupNotify=false
+Terminal=false
+Type=Application
+MimeType=x-scheme-handler/zclassic;
+Actions=Testnet;
+
+[Desktop Action Testnet]
+Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\" electrum-zclassic --testnet %u"
+Name=Testnet mode

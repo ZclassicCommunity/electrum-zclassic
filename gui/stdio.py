@@ -1,9 +1,9 @@
 from decimal import Decimal
 _ = lambda x:x
 #from i18n import _
-from electrum_zcash import WalletStorage, Wallet
-from electrum_zcash.util import format_satoshis, set_verbosity
-from electrum_zcash.bitcoin import is_address, COIN, TYPE_ADDRESS
+from electrum_zclassic import WalletStorage, Wallet
+from electrum_zclassic.util import format_satoshis, set_verbosity
+from electrum_zclassic.bitcoin import is_address, COIN, TYPE_ADDRESS
 import getpass, datetime
 
 # minimal fdisk like gui for console usage
@@ -16,7 +16,7 @@ class ElectrumGui:
         self.network = daemon.network
         storage = WalletStorage(config.get_wallet_path())
         if not storage.file_exists:
-            print("Wallet not found. try 'electrum-zcash create'")
+            print("Wallet not found. try 'electrum-zclassic create'")
             exit()
         if storage.is_encrypted():
             password = getpass.getpass('Password:', stream=None)
@@ -163,7 +163,7 @@ class ElectrumGui:
 
     def do_send(self):
         if not is_address(self.str_recipient):
-            print(_('Invalid Zcash address'))
+            print(_('Invalid Zclassic address'))
             return
         try:
             amount = int(Decimal(self.str_amount) * COIN)
@@ -208,12 +208,12 @@ class ElectrumGui:
             print(_('Error'))
 
     def network_dialog(self):
-        print("use 'electrum-zcash setconfig server/proxy' to change your network settings")
+        print("use 'electrum-zclassic setconfig server/proxy' to change your network settings")
         return True
 
 
     def settings_dialog(self):
-        print("use 'electrum-zcash setconfig' to change your settings")
+        print("use 'electrum-zclassic setconfig' to change your settings")
         return True
 
     def password_dialog(self):

@@ -39,19 +39,19 @@ import PyQt5.QtCore as QtCore
 from .exception_window import Exception_Hook
 from PyQt5.QtWidgets import *
 
-from electrum_zcash import keystore, simple_config
-from electrum_zcash.bitcoin import COIN, is_address, TYPE_ADDRESS
-from electrum_zcash import constants
-from electrum_zcash.plugins import run_hook
-from electrum_zcash.i18n import _
-from electrum_zcash.util import (format_time, format_satoshis, PrintError,
+from electrum_zclassic import keystore, simple_config
+from electrum_zclassic.bitcoin import COIN, is_address, TYPE_ADDRESS
+from electrum_zclassic import constants
+from electrum_zclassic.plugins import run_hook
+from electrum_zclassic.i18n import _
+from electrum_zclassic.util import (format_time, format_satoshis, PrintError,
                                 format_satoshis_plain, NotEnoughFunds,
                                 UserCancelled, NoDynamicFeeEstimates, profiler,
                                 export_meta, import_meta, bh2u, bfh, InvalidPassword)
-from electrum_zcash import Transaction
-from electrum_zcash import util, bitcoin, commands, coinchooser
-from electrum_zcash import paymentrequest
-from electrum_zcash.wallet import Multisig_Wallet, AddTransactionException
+from electrum_zclassic import Transaction
+from electrum_zclassic import util, bitcoin, commands, coinchooser
+from electrum_zclassic import paymentrequest
+from electrum_zclassic.wallet import Multisig_Wallet, AddTransactionException
 
 from .amountedit import AmountEdit, BTCAmountEdit, MyLineEdit, FeerateEdit
 from .qrcodewidget import QRCodeWidget, QRDialog
@@ -80,7 +80,7 @@ class StatusBarButton(QPushButton):
             self.func()
 
 
-from electrum_zcash.paymentrequest import PR_PAID
+from electrum_zclassic.paymentrequest import PR_PAID
 
 
 class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
@@ -160,7 +160,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         if self.config.get("is_maximized"):
             self.showMaximized()
 
-        self.setWindowIcon(QIcon(":icons/electrum-zcash.png"))
+        self.setWindowIcon(QIcon(":icons/electrum-zclassic.png"))
         self.init_menubar()
 
         wrtabs = weakref.proxy(tabs)
@@ -375,7 +375,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             self.setGeometry(100, 100, 840, 400)
 
     def watching_only_changed(self):
-        name = "Electrum-Zcash Testnet" if constants.net.TESTNET else "Electrum-Zcash"
+        name = "Electrum-Zclassic Testnet" if constants.net.TESTNET else "Electrum-Zclassic"
         title = '%s %s  -  %s' % (name, self.wallet.electrum_version,
                                         self.wallet.basename())
         extra = [self.wallet.storage.get('wallet_type', '?')]
@@ -393,8 +393,8 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         if self.wallet.is_watching_only():
             msg = ' '.join([
                 _("This wallet is watching-only."),
-                _("This means you will not be able to spend Zcash coins with it."),
-                _("Make sure you own the seed phrase or the private keys, before you request Zcash coins to be sent to this wallet.")
+                _("This means you will not be able to spend Zclassic coins with it."),
+                _("Make sure you own the seed phrase or the private keys, before you request Zclassic coins to be sent to this wallet.")
             ])
             self.show_warning(msg, title=_('Information'))
 
@@ -422,7 +422,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
                 shutil.copy2(path, new_path)
                 self.show_message(_("A copy of your wallet file was created in")+" '%s'" % str(new_path), title=_("Wallet backup created"))
             except BaseException as reason:
-                self.show_critical(_("Electrum-Zcash was unable to copy your wallet file to the specified location.") + "\n" + str(reason), title=_("Unable to create backup"))
+                self.show_critical(_("Electrum-Zclassic was unable to copy your wallet file to the specified location.") + "\n" + str(reason), title=_("Unable to create backup"))
 
     def update_recently_visited(self, filename):
         recent = self.config.get('recently_open', [])
@@ -521,7 +521,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         tools_menu = menubar.addMenu(_("&Tools"))
 
         # Settings / Preferences are all reserved keywords in macOS using this as work around
-        tools_menu.addAction(_("Electrum-Zcash preferences") if sys.platform == 'darwin' else _("Preferences"), self.settings_dialog)
+        tools_menu.addAction(_("Electrum-Zclassic preferences") if sys.platform == 'darwin' else _("Preferences"), self.settings_dialog)
         tools_menu.addAction(_("&Network"), lambda: self.gui_object.show_network_dialog(self))
         tools_menu.addAction(_("&Plugins"), self.plugins_dialog)
         tools_menu.addSeparator()
@@ -541,9 +541,9 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
 
         help_menu = menubar.addMenu(_("&Help"))
         help_menu.addAction(_("&About"), self.show_about)
-        #help_menu.addAction(_("&Official website"), lambda: webbrowser.open("https://github.com/zebra-lucky/electrum-zcash"))
+        #help_menu.addAction(_("&Official website"), lambda: webbrowser.open("https://github.com/zebra-lucky/electrum-zclassic"))
         help_menu.addSeparator()
-        #help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://github.com/zebra-lucky/electrum-zcash")).setShortcut(QKeySequence.HelpContents)
+        #help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://github.com/zebra-lucky/electrum-zclassic")).setShortcut(QKeySequence.HelpContents)
         #self._auto_crash_reports = QAction(_("&Automated Crash Reports"), self, checkable=True)
         #self._auto_crash_reports.setChecked(self.config.get("show_crash_reporter", default=False))
         #self._auto_crash_reports.triggered.connect(self.auto_crash_reports)
@@ -562,24 +562,24 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         d = self.network.get_donation_address()
         if d:
             host = self.network.get_parameters()[0]
-            self.pay_to_URI('zcash:%s?message=donation for %s'%(d, host))
+            self.pay_to_URI('zclassic:%s?message=donation for %s'%(d, host))
         else:
             self.show_error(_('No donation address for this server'))
 
     def show_about(self):
-        QMessageBox.about(self, "Electrum-Zcash",
+        QMessageBox.about(self, "Electrum-Zclassic",
             _("Version")+" %s" % (self.wallet.electrum_version) + "\n\n" +
-                _("Electrum-Zcash focus is speed, with low resource usage and simplifying Bitcoin. You do not need to perform regular backups, because your wallet can be recovered from a secret phrase that you can memorize or write on paper. Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the Bitcoin system."  + "\n\n" +
+                _("Electrum-Zclassic focus is speed, with low resource usage and simplifying Bitcoin. You do not need to perform regular backups, because your wallet can be recovered from a secret phrase that you can memorize or write on paper. Startup times are instant because it operates in conjunction with high-performance servers that handle the most complicated parts of the Bitcoin system."  + "\n\n" +
                 _("Uses icons from the Icons8 icon pack (icons8.com).")))
 
     def show_report_bug(self):
         msg = ' '.join([
             _("Please report any bugs as issues on github:<br/>"),
-            "<a href=\"https://github.com/zebra-lucky/electrum-zcash/issues\">https://github.com/zebra-lucky/electrum-zcash/issues</a><br/><br/>",
-            _("Before reporting a bug, upgrade to the most recent version of Electrum-Zcash (latest release or git HEAD), and include the version number in your report."),
+            "<a href=\"https://github.com/zebra-lucky/electrum-zclassic/issues\">https://github.com/zebra-lucky/electrum-zclassic/issues</a><br/><br/>",
+            _("Before reporting a bug, upgrade to the most recent version of Electrum-Zclassic (latest release or git HEAD), and include the version number in your report."),
             _("Try to explain not only what the bug is, but how it occurs.")
          ])
-        self.show_message(msg, title="Electrum-Zcash - " + _("Reporting Bugs"))
+        self.show_message(msg, title="Electrum-Zclassic - " + _("Reporting Bugs"))
 
     def notify_transactions(self):
         if not self.network or not self.network.is_connected():
@@ -609,9 +609,9 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         if self.tray:
             try:
                 # this requires Qt 5.9
-                self.tray.showMessage("Electrum-Zcash", message, QIcon(":icons/electrum_dark_icon"), 20000)
+                self.tray.showMessage("Electrum-Zclassic", message, QIcon(":icons/electrum_dark_icon"), 20000)
             except TypeError:
-                self.tray.showMessage("Electrum-Zcash", message, QSystemTrayIcon.Information, 20000)
+                self.tray.showMessage("Electrum-Zclassic", message, QSystemTrayIcon.Information, 20000)
 
 
 
@@ -666,11 +666,11 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def base_unit(self):
         assert self.decimal_point in [2, 5, 8]
         if self.decimal_point == 2:
-            return 'uZEC'
+            return 'uZCL'
         if self.decimal_point == 5:
-            return 'mZEC'
+            return 'mZCL'
         if self.decimal_point == 8:
-            return 'ZEC'
+            return 'ZCL'
         raise Exception('Unknown base unit')
 
     def connect_fields(self, window, btc_e, fiat_e, fee_e):
@@ -798,7 +798,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         self.receive_address_e = ButtonsLineEdit()
         self.receive_address_e.addCopyButton(self.app)
         self.receive_address_e.setReadOnly(True)
-        msg = _('Zcash address where the payment should be received. Note that each payment request uses a different Zcash address.')
+        msg = _('Zclassic address where the payment should be received. Note that each payment request uses a different Zclassic address.')
         self.receive_address_label = HelpLabel(_('Receiving address'), msg)
         self.receive_address_e.textChanged.connect(self.update_receive_qr)
         self.receive_address_e.setFocusPolicy(Qt.ClickFocus)
@@ -828,8 +828,8 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         msg = ' '.join([
             _('Expiration date of your request.'),
             _('This information is seen by the recipient if you send them a signed payment request.'),
-            _('Expired requests have to be deleted manually from your list, in order to free the corresponding Zcash addresses.'),
-            _('The Zcash address never expires and will always be part of this electrum-zcash wallet.'),
+            _('Expired requests have to be deleted manually from your list, in order to free the corresponding Zclassic addresses.'),
+            _('The Zclassic address never expires and will always be part of this electrum-zclassic wallet.'),
         ])
         grid.addWidget(HelpLabel(_('Request expires'), msg), 3, 0)
         grid.addWidget(self.expires_combo, 3, 1)
@@ -1055,7 +1055,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         self.amount_e = BTCAmountEdit(self.get_decimal_point)
         self.payto_e = PayToEdit(self)
         msg = _('Recipient of the funds.') + '\n\n'\
-              + _('You may enter a Zcash address, a label from your list of contacts (a list of completions will be proposed), or an alias (email-like address that forwards to a Zcash address)')
+              + _('You may enter a Zclassic address, a label from your list of contacts (a list of completions will be proposed), or an alias (email-like address that forwards to a Zclassic address)')
         payto_label = HelpLabel(_('Pay to'), msg)
         grid.addWidget(payto_label, 1, 0)
         grid.addWidget(self.payto_e, 1, 1, 1, -1)
@@ -1102,7 +1102,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         hbox.addStretch(1)
         grid.addLayout(hbox, 4, 4)
 
-        msg = _('Zcash transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
+        msg = _('Zclassic transactions are in general not free. A transaction fee is paid by the sender of the funds.') + '\n\n'\
               + _('The amount of fee can be decided freely by the sender. However, transactions with low fees take more time to be processed.') + '\n\n'\
               + _('A suggested fee is automatically added to this field. You may override it. The suggested fee increases with the size of the transaction.')
         self.fee_e_label = HelpLabel(_('Fee'), msg)
@@ -1163,7 +1163,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
 
         def feerounding_onclick():
             text = (self.feerounding_text + '\n\n' +
-                    _('To somewhat protect your privacy, Electrum-Zcash tries to create change with similar precision to other outputs.') + ' ' +
+                    _('To somewhat protect your privacy, Electrum-Zclassic tries to create change with similar precision to other outputs.') + ' ' +
                     _('At most 100 satoshis might be lost due to this rounding.') + ' ' +
                     _("You can disable this setting in '{}'.").format(_('Preferences')) + '\n' +
                     _('Also, dust is not kept as change, but added to the fee.'))
@@ -1486,10 +1486,10 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
 
         for _type, addr, amount in outputs:
             if addr is None:
-                self.show_error(_('Zcash Address is None'))
+                self.show_error(_('Zclassic Address is None'))
                 return
             if _type == TYPE_ADDRESS and not bitcoin.is_address(addr):
-                self.show_error(_('Invalid Zcash Address'))
+                self.show_error(_('Invalid Zclassic Address'))
                 return
             if amount is None:
                 self.show_error(_('Invalid Amount'))
@@ -1705,7 +1705,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         try:
             out = util.parse_URI(URI, self.on_pr)
         except BaseException as e:
-            self.show_error(_('Invalid zcash URI:') + '\n' + str(e))
+            self.show_error(_('Invalid zclassic URI:') + '\n' + str(e))
             return
         self.show_send_tab()
         r = out.get('r')
@@ -1964,7 +1964,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         self.send_button.setVisible(not self.wallet.is_watching_only())
 
     def change_password_dialog(self):
-        from electrum_zcash.storage import STO_EV_XPUB_PW
+        from electrum_zclassic.storage import STO_EV_XPUB_PW
         if self.wallet.get_available_storage_encryption_version() == STO_EV_XPUB_PW:
             from .password_dialog import ChangePasswordDialogForHW
             d = ChangePasswordDialogForHW(self, self.wallet)
@@ -2154,7 +2154,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         address  = address.text().strip()
         message = message.toPlainText().strip()
         if not bitcoin.is_address(address):
-            self.show_message(_('Invalid Zcash address.'))
+            self.show_message(_('Invalid Zclassic address.'))
             return
         if self.wallet.is_watching_only():
             self.show_message(_('This is a watching-only wallet.'))
@@ -2182,7 +2182,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         address  = address.text().strip()
         message = message.toPlainText().strip().encode('utf-8')
         if not bitcoin.is_address(address):
-            self.show_message(_('Invalid Zcash address.'))
+            self.show_message(_('Invalid Zclassic address.'))
             return
         try:
             # This can throw on invalid base64
@@ -2305,16 +2305,16 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         return d.run()
 
     def tx_from_text(self, txt):
-        from electrum_zcash.transaction import tx_from_str
+        from electrum_zclassic.transaction import tx_from_str
         try:
             tx = tx_from_str(txt)
             return Transaction(tx)
         except BaseException as e:
-            self.show_critical(_("Electrum-Zcash was unable to parse your transaction") + ":\n" + str(e))
+            self.show_critical(_("Electrum-Zclassic was unable to parse your transaction") + ":\n" + str(e))
             return
 
     def read_tx_from_qrcode(self):
-        from electrum_zcash import qrscanner
+        from electrum_zclassic import qrscanner
         try:
             data = qrscanner.scan_barcode(self.config.get_video_device())
         except BaseException as e:
@@ -2322,8 +2322,8 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             return
         if not data:
             return
-        # if the user scanned a zcash URI
-        if str(data).startswith("zcash:"):
+        # if the user scanned a zclassic URI
+        if str(data).startswith("zclassic:"):
             self.pay_to_URI(data)
             return
         # else if the user scanned an offline signed tx
@@ -2345,7 +2345,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             with open(fileName, "r") as f:
                 file_content = f.read()
         except (ValueError, IOError, os.error) as reason:
-            self.show_critical(_("Electrum-Zcash was unable to open your transaction file") + "\n" + str(reason), title=_("Unable to read file or no transaction found"))
+            self.show_critical(_("Electrum-Zclassic was unable to open your transaction file") + "\n" + str(reason), title=_("Unable to read file or no transaction found"))
             return
         return self.tx_from_text(file_content)
 
@@ -2363,7 +2363,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             self.show_transaction(tx)
 
     def do_process_from_txid(self):
-        from electrum_zcash import transaction
+        from electrum_zclassic import transaction
         txid, ok = QInputDialog.getText(self, _('Lookup transaction'), _('Transaction ID') + ':')
         if ok and txid:
             txid = str(txid).strip()
@@ -2398,7 +2398,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         e.setReadOnly(True)
         vbox.addWidget(e)
 
-        defaultname = 'electrum-zcash-private-keys.csv'
+        defaultname = 'electrum-zclassic-private-keys.csv'
         select_msg = _('Select file to export your private keys to')
         hbox, filename_e, csv_button = filename_field(self, self.config, defaultname, select_msg)
         vbox.addLayout(hbox)
@@ -2456,7 +2456,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
             self.do_export_privkeys(filename, private_keys, csv_button.isChecked())
         except (IOError, os.error) as reason:
             txt = "\n".join([
-                _("Electrum-Zcash was unable to produce a private key-export."),
+                _("Electrum-Zclassic was unable to produce a private key-export."),
                 str(reason)
             ])
             self.show_critical(txt, title=_("Unable to create csv"))
@@ -2538,7 +2538,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         address_e.textChanged.connect(on_address)
         if not d.exec_():
             return
-        from electrum_zcash.wallet import sweep_preparations
+        from electrum_zclassic.wallet import sweep_preparations
         try:
             self.do_clear()
             coins, keypairs = sweep_preparations(get_pk(), self.network)
@@ -2611,7 +2611,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         lang_help = _('Select which language is used in the GUI (after restart).')
         lang_label = HelpLabel(_('Language') + ':', lang_help)
         lang_combo = QComboBox()
-        from electrum_zcash.i18n import languages
+        from electrum_zclassic.i18n import languages
         lang_combo.addItems(list(languages.values()))
         try:
             index = languages.keys().index(self.config.get("language",''))
@@ -2720,9 +2720,9 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         SSL_id_e.setReadOnly(True)
         id_widgets.append((SSL_id_label, SSL_id_e))
 
-        units = ['ZEC', 'mZEC', 'uZEC']
+        units = ['ZCL', 'mZCL', 'uZCL']
         msg = (_('Base unit of your wallet.')
-               + '\n1 ZEC = 1000 mZEC. 1 mZEC = 1000 uZEC.\n'
+               + '\n1 ZCL = 1000 mZCL. 1 mZCL = 1000 uZCL.\n'
                + _('This setting affects the Send tab, and all balance related fields.'))
         unit_label = HelpLabel(_('Base unit') + ':', msg)
         unit_combo = QComboBox()
@@ -2734,11 +2734,11 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
                 return
             edits = self.amount_e, self.fee_e, self.receive_amount_e
             amounts = [edit.get_amount() for edit in edits]
-            if unit_result == 'ZEC':
+            if unit_result == 'ZCL':
                 self.decimal_point = 8
-            elif unit_result == 'mZEC':
+            elif unit_result == 'mZCL':
                 self.decimal_point = 5
-            elif unit_result == 'uZEC':
+            elif unit_result == 'uZCL':
                 self.decimal_point = 2
             else:
                 raise Exception('Unknown base unit')
@@ -2765,7 +2765,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         block_ex_combo.currentIndexChanged.connect(on_be)
         gui_widgets.append((block_ex_label, block_ex_combo))
 
-        from electrum_zcash import qrscanner
+        from electrum_zclassic import qrscanner
         system_cameras = qrscanner._find_system_cameras()
         qr_combo = QComboBox()
         qr_combo.addItem("Default","default")
@@ -2986,7 +2986,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
 
         run_hook('close_settings_dialog')
         if self.need_restart:
-            self.show_warning(_('Please restart Electrum-Zcash to activate the new GUI settings'), title=_('Success'))
+            self.show_warning(_('Please restart Electrum-Zclassic to activate the new GUI settings'), title=_('Success'))
 
 
     def closeEvent(self, event):
@@ -3013,7 +3013,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
         self.gui_object.close_window(self)
 
     def plugins_dialog(self):
-        self.pluginsdialog = d = WindowModalDialog(self, _('Electrum-Zcash Plugins'))
+        self.pluginsdialog = d = WindowModalDialog(self, _('Electrum-Zclassic Plugins'))
 
         plugins = self.gui_object.plugins
 

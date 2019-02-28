@@ -6,18 +6,18 @@ if [[ -z $TRAVIS_TAG ]]; then
   exit 1
 fi
 
-BUILD_REPO_URL=https://github.com/zebra-lucky/electrum-zcash
+BUILD_REPO_URL=https://github.com/zebra-lucky/electrum-zclassic
 
 cd build
 
-git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-zcash
+git clone --branch $TRAVIS_TAG $BUILD_REPO_URL electrum-zclassic
 
-cd electrum-zcash
+cd electrum-zclassic
 
 export PY36BINDIR=/Library/Frameworks/Python.framework/Versions/3.6/bin/
 export PATH=$PATH:$PY36BINDIR
-source ./contrib/zcash/travis/electrum_zcash_version_env.sh;
-echo wine build version is $ELECTRUM_ZCASH_VERSION
+source ./contrib/zclassic/travis/electrum_zclassic_version_env.sh;
+echo wine build version is $ELECTRUM_ZCL_VERSION
 
 sudo pip3 install --upgrade pip
 sudo pip3 install -r contrib/deterministic-build/requirements.txt
@@ -35,15 +35,15 @@ export PATH="/usr/local/opt/gettext/bin:$PATH"
 find . -name '*.po' -delete
 find . -name '*.pot' -delete
 
-cp contrib/zcash/osx.spec .
-cp contrib/zcash/pyi_runtimehook.py .
-cp contrib/zcash/pyi_tctl_runtimehook.py .
+cp contrib/zclassic/osx.spec .
+cp contrib/zclassic/pyi_runtimehook.py .
+cp contrib/zclassic/pyi_tctl_runtimehook.py .
 
 pyinstaller \
     -y \
-    --name electrum-zcash-$ELECTRUM_ZCASH_VERSION.bin \
+    --name electrum-zclassic-$ELECTRUM_ZCL_VERSION.bin \
     osx.spec
 
-sudo hdiutil create -fs HFS+ -volname "Electrum-Zcash" \
-    -srcfolder dist/Electrum-Zcash.app \
-    dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-macosx.dmg
+sudo hdiutil create -fs HFS+ -volname "Electrum-Zclassic" \
+    -srcfolder dist/Electrum-Zclassic.app \
+    dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-macosx.dmg

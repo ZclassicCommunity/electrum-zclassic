@@ -1,10 +1,10 @@
 # Kivy GUI
 
-The Kivy GUI is used with Electrum-Zcash on Android devices. To generate an APK file, follow these instructions.
+The Kivy GUI is used with Electrum-Zclassic on Android devices. To generate an APK file, follow these instructions.
 
 ## 1. Install python-for-android (p4a)
-p4a is used to package Electrum-Zcash, Python, SDL and a bootstrap Java app into an APK file. 
-We patched p4a to add some functionality we need for Electrum-Zcash. Until those changes are
+p4a is used to package Electrum-Zclassic, Python, SDL and a bootstrap Java app into an APK file.
+We patched p4a to add some functionality we need for Electrum-Zclassic. Until those changes are
 merged into p4a, you need to merge them locally (into the master branch):
 
 1.1 [kivy/python-for-android#1217](https://github.com/kivy/python-for-android/pull/1217)
@@ -60,9 +60,9 @@ Extract into `/opt/crystax-ndk-10.3.2`
 
 
 ## 5. Create the UI Atlas
-In the `gui/kivy` directory of Electrum-Zcash, run `make theming`.
+In the `gui/kivy` directory of Electrum-Zclassic, run `make theming`.
 
-## 6. Download Electrum-Zcash dependencies
+## 6. Download Electrum-Zclassic dependencies
 Run `contrib/make_packages`.
 
 ## 7. Build the APK

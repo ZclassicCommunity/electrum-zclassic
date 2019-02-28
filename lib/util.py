@@ -40,7 +40,7 @@ def inv_dict(d):
     return {v: k for k, v in d.items()}
 
 
-base_units = {'ZEC':8, 'mZEC':5, 'uZEC':2}
+base_units = {'ZCL':8, 'mZCL':5, 'uZCL':2}
 
 def normalize_version(v):
     return [int(x) for x in re.sub(r'(\.0+)*$','', v).split(".")]
@@ -313,7 +313,7 @@ def android_data_dir():
     return PythonActivity.mActivity.getFilesDir().getPath() + '/data'
 
 def android_headers_dir():
-    d = android_ext_dir() + '/cash.z.electrum.electrum_zcash'
+    d = android_ext_dir() + '/cash.z.electrum.electrum_zclassic'
     if not os.path.exists(d):
         os.mkdir(d)
     return d
@@ -322,7 +322,7 @@ def android_check_data_dir():
     """ if needed, move old directory to sandbox """
     ext_dir = android_ext_dir()
     data_dir = android_data_dir()
-    old_electrum_dir = ext_dir + '/electrum-zcash'
+    old_electrum_dir = ext_dir + '/electrum-zclassic'
     if not os.path.exists(data_dir) and os.path.exists(old_electrum_dir):
         import shutil
         new_headers_path = android_headers_dir() + '/blockchain_headers'
@@ -403,11 +403,11 @@ def user_dir():
     if 'ANDROID_DATA' in os.environ:
         return android_check_data_dir()
     elif os.name == 'posix':
-        return os.path.join(os.environ["HOME"], ".electrum-zcash")
+        return os.path.join(os.environ["HOME"], ".electrum-zclassic")
     elif "APPDATA" in os.environ:
-        return os.path.join(os.environ["APPDATA"], "Electrum-Zcash")
+        return os.path.join(os.environ["APPDATA"], "Electrum-Zclassic")
     elif "LOCALAPPDATA" in os.environ:
-        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-Zcash")
+        return os.path.join(os.environ["LOCALAPPDATA"], "Electrum-Zclassic")
     else:
         #raise Exception("No home directory found in environment variables.")
         return
@@ -506,7 +506,7 @@ def time_difference(distance_in_time, include_seconds):
         return "over %d years" % (round(distance_in_minutes / 525600))
 
 mainnet_block_explorers = {
-    'blockexplorer.com': ('https://zcash.blockexplorer.com/blocks/',
+    'blockexplorer.com': ('https://zclassic.blockexplorer.com/blocks/',
                         {'tx': 'transactions/', 'addr': 'addresses/'}),
     'system default': ('blockchain:/',
                         {'tx': 'tx/', 'addr': 'address/'}),
@@ -549,12 +549,12 @@ def parse_URI(uri, on_pr=None):
 
     if ':' not in uri:
         if not bitcoin.is_address(uri):
-            raise Exception("Not a Zcash address")
+            raise Exception("Not a Zclassic address")
         return {'address': uri}
 
     u = urllib.parse.urlparse(uri)
-    if u.scheme != 'zcash':
-        raise Exception("Not a Zcash URI")
+    if u.scheme != 'zclassic':
+        raise Exception("Not a Zclassic URI")
     address = u.path
 
     # python for android fails to parse query
@@ -571,7 +571,7 @@ def parse_URI(uri, on_pr=None):
     out = {k: v[0] for k, v in pq.items()}
     if address:
         if not bitcoin.is_address(address):
-            raise Exception("Invalid Zcash address:" + address)
+            raise Exception("Invalid Zclassic address:" + address)
         out['address'] = address
     if 'amount' in out:
         am = out['amount']
@@ -621,7 +621,7 @@ def create_URI(addr, amount, message):
         query.append('amount=%s'%format_satoshis_plain(amount))
     if message:
         query.append('message=%s'%urllib.parse.quote(message))
-    p = urllib.parse.ParseResult(scheme='zcash', netloc='', path=addr, params='', query='&'.join(query), fragment='')
+    p = urllib.parse.ParseResult(scheme='zclassic', netloc='', path=addr, params='', query='&'.join(query), fragment='')
     return urllib.parse.urlunparse(p)
 
 

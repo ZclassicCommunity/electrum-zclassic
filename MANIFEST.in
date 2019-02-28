@@ -1,9 +1,9 @@
 include LICENCE RELEASE-NOTES AUTHORS
 include README.rst
-include electrum-zcash.conf.sample
-include electrum-zcash.desktop
+include electrum-zclassic.conf.sample
+include electrum-zclassic.desktop
 include *.py
-include electrum-zcash
+include electrum-zclassic
 include contrib/requirements/requirements.txt
 include contrib/requirements/requirements-hw.txt
 recursive-include lib *.py

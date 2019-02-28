@@ -350,7 +350,7 @@ class Abstract_Wallet(PrintError):
         addrs = self.get_receiving_addresses()
         if len(addrs) > 0:
             if not bitcoin.is_address(addrs[0]):
-                raise WalletFileException('The addresses in this wallet are not Zcash addresses.')
+                raise WalletFileException('The addresses in this wallet are not Zclassic addresses.')
 
     def synchronize(self):
         pass
@@ -1198,7 +1198,7 @@ class Abstract_Wallet(PrintError):
             _type, data, value = o
             if _type == TYPE_ADDRESS:
                 if not is_address(data):
-                    raise Exception("Invalid Zcash address: {}".format(data))
+                    raise Exception("Invalid Zclassic address: {}".format(data))
             if value == '!':
                 if i_max is not None:
                     raise Exception("More than one output set to spend max")
@@ -1478,7 +1478,7 @@ class Abstract_Wallet(PrintError):
         if not r:
             return
         out = copy.copy(r)
-        out['URI'] = 'zcash:' + addr + '?amount=' + format_satoshis(out.get('amount'))
+        out['URI'] = 'zclassic:' + addr + '?amount=' + format_satoshis(out.get('amount'))
         status, conf = self.get_request_status(addr)
         out['status'] = status
         if conf is not None:
@@ -1555,7 +1555,7 @@ class Abstract_Wallet(PrintError):
     def add_payment_request(self, req, config):
         addr = req['address']
         if not bitcoin.is_address(addr):
-            raise Exception(_('Invalid Zcash address.'))
+            raise Exception(_('Invalid Zclassic address.'))
         if not self.is_mine(addr):
             raise Exception(_('Address not in wallet.'))
 

@@ -119,7 +119,7 @@ class SimpleConfig(PrintError):
             path = os.path.join(path, 'regtest')
             make_dir(path)
 
-        self.print_error("electrum-zcash directory", path)
+        self.print_error("electrum-zclassic directory", path)
         return path
 
     def rename_config_keys(self, config, keypairs, deprecation_warning=False):
@@ -238,7 +238,7 @@ class SimpleConfig(PrintError):
         # default path
         if not os.path.exists(self.path):
             raise FileNotFoundError(
-                _('Electrum-Zcash datadir does not exist. Was it deleted while running?') + '\n' +
+                _('Electrum-Zclassic datadir does not exist. Was it deleted while running?') + '\n' +
                 _('Should be at {}').format(self.path))
         dirpath = os.path.join(self.path, "wallets")
         if not os.path.exists(dirpath):
@@ -488,7 +488,7 @@ class SimpleConfig(PrintError):
 
 
 def read_user_config(path):
-    """Parse and store the user config settings in electrum-zcash.conf into user_config[]."""
+    """Parse and store the user config settings in electrum-zclassic.conf into user_config[]."""
     if not path:
         return {}
     config_path = os.path.join(path, "config")

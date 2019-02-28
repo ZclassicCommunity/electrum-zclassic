@@ -93,8 +93,8 @@ Builder.load_string('''
 ''')
 
 
-from electrum_zcash_gui.kivy.i18n import _
-from electrum_zcash_gui.kivy.uix.context_menu import ContextMenu
+from electrum_zclassic_gui.kivy.i18n import _
+from electrum_zclassic_gui.kivy.uix.context_menu import ContextMenu
 
 
 class EmptyLabel(Factory.Label):
@@ -171,7 +171,7 @@ class AddressesDialog(Factory.Popup):
 
     def ext_search(self, card, search):
         return card.memo.find(search) >= 0 or card.amount.find(search) >= 0
-        
+
     def show_menu(self, obj):
         self.hide_menu()
         self.context_menu = ContextMenu(obj, self.menu_actions)

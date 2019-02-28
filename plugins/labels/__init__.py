@@ -1,4 +1,4 @@
-from electrum_zcash.i18n import _
+from electrum_zclassic.i18n import _
 
 fullname = _('LabelSync')
 description = ' '.join([

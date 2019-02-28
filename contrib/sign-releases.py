@@ -27,9 +27,9 @@ Manual signing:
     jarsigner -verbose \
         -tsa http://sha256timestamp.ws.symantec.com/sha256/timestamp \
         -sigalg SHA1withRSA -digestalg SHA1 \
-        -sigfile zcash-electrum \
+        -sigfile zclassic-electrum \
         -keystore ~/.jks/keystore \
-        Electrum_Zcash-3.0.6.1-release-unsigned.apk \
+        Electrum_Zclassic-3.0.6.1-release-unsigned.apk \
         electrum.z.cash
 
 Zipalign from Android SDK build tools is also required (set path to bin in
@@ -48,8 +48,8 @@ settings file or with key -z). To install:
 Manual zip aligning:
 
     android-sdk-linux/build-tools/27.0.3/zipalign -v 4 \
-        Electrum_Zcash-3.0.6.1-release-unsigned.apk \
-        Electrum_Zcash-3.0.6.1-release.apk
+        Electrum_Zclassic-3.0.6.1-release-unsigned.apk \
+        Electrum_Zclassic-3.0.6.1-release.apk
 
 
 
@@ -143,9 +143,9 @@ PEP440_PUBVER_PATTERN = re.compile('^((\d+)!)?'
                                    '([a-zA-Z]+\d+)?'
                                    '((\.[a-zA-Z]+\d+)*)$')
 REL_NOTES_PATTERN = re.compile('^#.+?(^[^#].+?)^#.+?', re.M | re.S)
-SDIST_NAME_PATTERN = re.compile('^Electrum-Zcash-(.*).tar.gz$')
-SDIST_DIR_TEMPLATE = 'Electrum-Zcash-{version}'
-PPA_SOURCE_NAME = 'electrum-zcash'
+SDIST_NAME_PATTERN = re.compile('^Electrum-Zclassic-(.*).tar.gz$')
+SDIST_DIR_TEMPLATE = 'Electrum-Zclassic-{version}'
+PPA_SOURCE_NAME = 'electrum-zclassic'
 PPA_ORIG_NAME_TEMPLATE = '%s_{version}.orig.tar.gz' % PPA_SOURCE_NAME
 CHANGELOG_TEMPLATE = """%s ({ppa_version}) {series}; urgency=medium
 {changes} -- {uid}  {time}""" % PPA_SOURCE_NAME
@@ -164,12 +164,12 @@ JARSIGNER_ARGS = [
     'jarsigner', '-verbose',
     '-tsa', 'http://sha256timestamp.ws.symantec.com/sha256/timestamp',
     '-sigalg', 'SHA1withRSA', '-digestalg', 'SHA1',
-    '-sigfile', 'zcash-electrum',
+    '-sigfile', 'zclassic-electrum',
     '-storepass:env', JKS_STOREPASS,
     '-keypass:env', JKS_KEYPASS,
 ]
-UNSIGNED_APK_PATTERN = re.compile('^Electrum_Zcash-(.*)-release-unsigned.apk$')
-SIGNED_APK_TEMPLATE = 'Electrum_Zcash-{version}-release.apk'
+UNSIGNED_APK_PATTERN = re.compile('^Electrum_Zclassic-(.*)-release-unsigned.apk$')
+SIGNED_APK_TEMPLATE = 'Electrum_Zclassic-{version}-release.apk'
 
 
 os.environ['QUILT_PATCHES'] = 'debian/patches'

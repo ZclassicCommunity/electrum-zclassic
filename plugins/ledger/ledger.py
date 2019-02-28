@@ -3,17 +3,17 @@ import hashlib
 import sys
 import traceback
 
-from electrum_zcash import bitcoin
-from electrum_zcash import constants
-from electrum_zcash.bitcoin import (TYPE_ADDRESS, int_to_hex, var_int,
+from electrum_zclassic import bitcoin
+from electrum_zclassic import constants
+from electrum_zclassic.bitcoin import (TYPE_ADDRESS, int_to_hex, var_int,
                                    b58_address_to_hash160,
                                    hash160_to_b58_address)
-from electrum_zcash.i18n import _
-from electrum_zcash.plugins import BasePlugin
-from electrum_zcash.keystore import Hardware_KeyStore
-from electrum_zcash.transaction import Transaction
+from electrum_zclassic.i18n import _
+from electrum_zclassic.plugins import BasePlugin
+from electrum_zclassic.keystore import Hardware_KeyStore
+from electrum_zclassic.transaction import Transaction
 from ..hw_wallet import HW_PluginBase
-from electrum_zcash.util import print_error, is_verbose, bfh, bh2u, versiontuple
+from electrum_zclassic.util import print_error, is_verbose, bfh, bh2u, versiontuple
 
 
 def setAlternateCoinVersions(self, regular, p2sh):
@@ -187,7 +187,7 @@ class Ledger_Client():
                 self.perform_hw1_preflight()
             except BTChipException as e:
                 if (e.sw == 0x6d00 or e.sw == 0x6700):
-                    raise Exception(_("Device not in Zcash mode")) from e
+                    raise Exception(_("Device not in Zclassic mode")) from e
                 raise e
             self.preflightDone = True
 

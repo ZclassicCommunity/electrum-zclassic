@@ -17,15 +17,15 @@ from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.utils import platform
 
-from electrum_zcash.util import profiler, parse_URI, format_time, InvalidPassword, NotEnoughFunds, Fiat
-from electrum_zcash import bitcoin
-from electrum_zcash.util import timestamp_to_datetime
-from electrum_zcash.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
+from electrum_zclassic.util import profiler, parse_URI, format_time, InvalidPassword, NotEnoughFunds, Fiat
+from electrum_zclassic import bitcoin
+from electrum_zclassic.util import timestamp_to_datetime
+from electrum_zclassic.paymentrequest import PR_UNPAID, PR_PAID, PR_UNKNOWN, PR_EXPIRED
 
 from .context_menu import ContextMenu
 
 
-from electrum_zcash_gui.kivy.i18n import _
+from electrum_zclassic_gui.kivy.i18n import _
 
 
 class CScreen(Factory.Screen):
@@ -170,11 +170,11 @@ class SendScreen(CScreen):
     payment_request = None
 
     def set_URI(self, text):
-        import electrum_zcash
+        import electrum_zclassic
         try:
-            uri = electrum_zcash.util.parse_URI(text, self.app.on_pr)
+            uri = electrum_zclassic.util.parse_URI(text, self.app.on_pr)
         except:
-            self.app.show_info(_("Not a Zcash URI"))
+            self.app.show_info(_("Not a Zclassic URI"))
             return
         amount = uri.get('amount')
         self.screen.address = uri.get('address', '')
@@ -212,7 +212,7 @@ class SendScreen(CScreen):
             # it should be already saved
             return
         # save address as invoice
-        from electrum_zcash.paymentrequest import make_unsigned_request, PaymentRequest
+        from electrum_zclassic.paymentrequest import make_unsigned_request, PaymentRequest
         req = {'address':self.screen.address, 'memo':self.screen.message}
         amount = self.app.get_amount(self.screen.amount) if self.screen.amount else 0
         req['amount'] = amount
@@ -243,10 +243,10 @@ class SendScreen(CScreen):
         else:
             address = str(self.screen.address)
             if not address:
-                self.app.show_error(_('Recipient not specified.') + ' ' + _('Please scan a Zcash address or a payment request'))
+                self.app.show_error(_('Recipient not specified.') + ' ' + _('Please scan a Zclassic address or a payment request'))
                 return
             if not bitcoin.is_address(address):
-                self.app.show_error(_('Invalid Zcash Address') + ':\n' + address)
+                self.app.show_error(_('Invalid Zclassic Address') + ':\n' + address)
                 return
             try:
                 amount = self.app.get_amount(self.screen.amount)
@@ -340,7 +340,7 @@ class ReceiveScreen(CScreen):
         Clock.schedule_once(lambda dt: self.update_qr())
 
     def get_URI(self):
-        from electrum_zcash.util import create_URI
+        from electrum_zclassic.util import create_URI
         amount = self.screen.amount
         if amount:
             a, u = self.screen.amount.split()
@@ -356,7 +356,7 @@ class ReceiveScreen(CScreen):
 
     def do_share(self):
         uri = self.get_URI()
-        self.app.do_share(uri, _("Share Zcash Request"))
+        self.app.do_share(uri, _("Share Zclassic Request"))
 
     def do_copy(self):
         uri = self.get_URI()

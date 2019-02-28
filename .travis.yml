@@ -22,9 +22,9 @@ matrix:
     os: linux
     python: "3.6"
 before_install:
-- source contrib/zcash/travis/electrum_zcash_version_env.sh
-- echo electrum-zcash version is $ELECTRUM_ZCASH_VERSION
-- mkdir -p build && cp contrib/zcash/travis/* ./build/
+- source contrib/zclassic/travis/electrum_zclassic_version_env.sh
+- echo electrum-zclassic version is $ELECTRUM_ZCL_VERSION
+- mkdir -p build && cp contrib/zclassic/travis/* ./build/
 - if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then
       ./build/before_install-osx.sh;
   fi
@@ -56,20 +56,20 @@ deploy:
   api_key:
     secure: G+TcxPJSQQ2bTNhkTX4aofnsiNFrzbuFTGty/+jIKDb/IQ69etXS9Ulu8KGD71VjEdXugFWdus+2a8fFSCSg79+AvrSxKa1ztXQ2q6tmovRkUcnF5Bkbc+ORLm3+FMZhonvMg+MLnHS3hnvJL/CZU0Pn2dkfODn7/t+MsGs99MN0G44qimq+FCu+YHaKVcGgiTs1I6nextIH+lnPw5qE6VxTQKdFp4PTHqY1qZJWamReVvtyMnfGpa+QwcKf43dXzZrHMLfFprfzEi1DExrhRi0a8RZlFWmAtkwH9zzJXzqOEmivniLfeALJzWkBJG4I2Fu7QSQhvPllhnt5uGdV3pgmHZUxL1DZckrqVG5b6P/Cnmbu0hWXbkPpZ7sXQ4X7wGhAVgH2sRPF1SfE9XvqDsmKvpspdKGmI+9yKoaWekbt8igfJ8jRBK4yRJAt+F/waeXkj7HJhSPIYg9wNvYCnCmoih4brRcTE4nyJBo/ySY3DVocflS3QGoClOrBpwXGgzwaUzBamRhJeCUe9ockPJyUs9DkuBIdsPfhq0nZfZFMhNBtpzm1hPGE92NojUi+DcI12WqweUqDWZzY/02MmfHLeN6mGgjTWvgOwnq1fvc6s7sVy7nANtA6UseWF2KUBYfuMKAxTU4WadpZ102znz4XiL4B7TILKJMU+Ht+a+c=
   file:
-  - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-macosx.dmg
+  - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-macosx.dmg
   on:
-    repo: zebra-lucky/electrum-zcash
+    repo: zebra-lucky/electrum-zclassic
     tags: true
     condition: "$TRAVIS_OS_NAME = osx"
 - provider: releases
   api_key:
     secure: G+TcxPJSQQ2bTNhkTX4aofnsiNFrzbuFTGty/+jIKDb/IQ69etXS9Ulu8KGD71VjEdXugFWdus+2a8fFSCSg79+AvrSxKa1ztXQ2q6tmovRkUcnF5Bkbc+ORLm3+FMZhonvMg+MLnHS3hnvJL/CZU0Pn2dkfODn7/t+MsGs99MN0G44qimq+FCu+YHaKVcGgiTs1I6nextIH+lnPw5qE6VxTQKdFp4PTHqY1qZJWamReVvtyMnfGpa+QwcKf43dXzZrHMLfFprfzEi1DExrhRi0a8RZlFWmAtkwH9zzJXzqOEmivniLfeALJzWkBJG4I2Fu7QSQhvPllhnt5uGdV3pgmHZUxL1DZckrqVG5b6P/Cnmbu0hWXbkPpZ7sXQ4X7wGhAVgH2sRPF1SfE9XvqDsmKvpspdKGmI+9yKoaWekbt8igfJ8jRBK4yRJAt+F/waeXkj7HJhSPIYg9wNvYCnCmoih4brRcTE4nyJBo/ySY3DVocflS3QGoClOrBpwXGgzwaUzBamRhJeCUe9ockPJyUs9DkuBIdsPfhq0nZfZFMhNBtpzm1hPGE92NojUi+DcI12WqweUqDWZzY/02MmfHLeN6mGgjTWvgOwnq1fvc6s7sVy7nANtA6UseWF2KUBYfuMKAxTU4WadpZ102znz4XiL4B7TILKJMU+Ht+a+c=
   file:
-  - build/electrum-zcash/dist/Electrum-Zcash-$ELECTRUM_ZCASH_VERSION.tar.gz
-  - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-setup-win32.exe
-  - build/electrum-zcash/dist/electrum-zcash-$ELECTRUM_ZCASH_VERSION-setup-win64.exe
-  - build/electrum-zcash/bin/Electrum_Zcash-$ELECTRUM_ZCASH_APK_VERSION-release-unsigned.apk
+  - build/electrum-zclassic/dist/Electrum-Zclassic-$ELECTRUM_ZCL_VERSION.tar.gz
+  - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-setup-win32.exe
+  - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-setup-win64.exe
+  - build/electrum-zclassic/bin/Electrum_Zclassic-$ELECTRUM_ZCL_APK_VERSION-release-unsigned.apk
   on:
-    repo: zebra-lucky/electrum-zcash
+    repo: zebra-lucky/electrum-zclassic
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"

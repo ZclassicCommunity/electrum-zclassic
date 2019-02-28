@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = Electrum-Zcash
+title = Electrum-Zclassic
 
 # (str) Package name
-package.name = Electrum-Zcash
+package.name = Electrum-Zclassic
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = cash.z.electrum

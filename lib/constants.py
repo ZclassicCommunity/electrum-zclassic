@@ -43,8 +43,8 @@ class BitcoinMainnet:
     WIF_PREFIX = 0x80
     ADDRTYPE_P2PKH = bytes.fromhex('1CB8')
     ADDRTYPE_P2SH = bytes.fromhex('1CBD')
-    GENESIS = "00040fe8ec8471911baa1db1266ea15dd06b4a8a5c453883c000b031973dce08"
-    DEFAULT_PORTS = {'t': '50021', 's': '50022'}
+    GENESIS = "0007104ccda289427919efc39dc9e4d499804b7bebc22df55f8b834301260602"
+    DEFAULT_PORTS = {'t': '50001', 's': '50002'}
     DEFAULT_SERVERS = read_json('servers.json', {})
     CHECKPOINTS = read_json('checkpoints.json', [])
 
@@ -54,7 +54,7 @@ class BitcoinMainnet:
     XPUB_HEADERS = {
         'standard':    0x0488b21e,  # xpub
     }
-    OVERWINTER_HEIGHT = 347500
+    OVERWINTER_HEIGHT = 476969
 
 
 class BitcoinTestnet:
@@ -63,7 +63,7 @@ class BitcoinTestnet:
     WIF_PREFIX = 0xEF
     ADDRTYPE_P2PKH = bytes.fromhex('1D25')
     ADDRTYPE_P2SH = bytes.fromhex('1CBA')
-    GENESIS = "05a60a92d99d85997cce3b87616c089f6124d7342af37106edc76126334a2c38"
+    GENESIS = "03e1c4bb705c871bf9bfda3e74b7f8f86bff267993c215a89d5795e3708e5e1f"
     DEFAULT_PORTS = {'t': '51021', 's': '51022'}
     DEFAULT_SERVERS = read_json('servers_testnet.json', {})
     CHECKPOINTS = read_json('checkpoints_testnet.json', [])
@@ -74,7 +74,7 @@ class BitcoinTestnet:
     XPUB_HEADERS = {
         'standard':    0x043587cf,  # tpub
     }
-    OVERWINTER_HEIGHT = 207500
+    OVERWINTER_HEIGHT = 476969
 
 
 class BitcoinRegtest(BitcoinTestnet):
