@@ -87,7 +87,7 @@ class Ledger_Client():
     @test_pin_unlocked
     def get_xpub(self, bip32_path, xtype):
         self.checkDevice()
-        # bip32_path is of the form 44'/133'/1'
+        # bip32_path is of the form 44'/147'/0'
         # S-L-O-W - we don't handle the fingerprint directly, so compute
         # it manually from the previous node
         # This only happens once so it's bearable
