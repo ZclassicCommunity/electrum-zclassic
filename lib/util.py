@@ -506,10 +506,10 @@ def time_difference(distance_in_time, include_seconds):
         return "over %d years" % (round(distance_in_minutes / 525600))
 
 mainnet_block_explorers = {
-    'blockexplorer.com': ('https://zclassic.blockexplorer.com/blocks/',
-                        {'tx': 'transactions/', 'addr': 'addresses/'}),
-    'system default': ('blockchain:/',
-                        {'tx': 'tx/', 'addr': 'address/'}),
+    'zclele.duckdns.org:3001': ('http://zclele.duckdns.org:3001',
+                        {'tx': 'tx', 'addr': 'address'}),
+    'zclassic-ce.io': ('http://zclassic-ce.io',
+                        {'tx': 'tx', 'addr': 'address'}),
 }
 
 testnet_block_explorers = {
@@ -524,7 +524,7 @@ def block_explorer_info():
     return testnet_block_explorers if constants.net.TESTNET else mainnet_block_explorers
 
 def block_explorer(config):
-    return config.get('block_explorer', 'blockexplorer.com')
+    return config.get('block_explorer', 'zclassic-ce.io')
 
 def block_explorer_tuple(config):
     return block_explorer_info().get(block_explorer(config))
