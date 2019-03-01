@@ -834,11 +834,11 @@ class Transaction:
             nHeader = int_to_hex(0x80000000 | version, 4)
             nVersionGroupId = int_to_hex(self.versionGroupId, 4)
             s_prevouts = bfh(''.join(self.serialize_outpoint(txin) for txin in inputs))
-            hashPrevouts = blake2b(s_prevouts, digest_size=32, person=b'ZclassicPrevoutHash').hexdigest()
+            hashPrevouts = blake2b(s_prevouts, digest_size=32, person=b'ZcashPrevoutHash').hexdigest()
             s_sequences = bfh(''.join(int_to_hex(txin.get('sequence', 0xffffffff - 1), 4) for txin in inputs))
-            hashSequence = blake2b(s_sequences, digest_size=32, person=b'ZclassicSequencHash').hexdigest()
+            hashSequence = blake2b(s_sequences, digest_size=32, person=b'ZcashSequencHash').hexdigest()
             s_outputs = bfh(''.join(self.serialize_output(o) for o in outputs))
-            hashOutputs = blake2b(s_outputs, digest_size=32, person=b'ZclassicOutputsHash').hexdigest()
+            hashOutputs = blake2b(s_outputs, digest_size=32, person=b'ZcashOutputsHash').hexdigest()
             joinSplits = self.joinSplits
             #if joinSplits is None:
             #    hashJoinSplits = '00'*32
@@ -993,7 +993,7 @@ class Transaction:
                     # add signature
                     if self.overwintered:
                         data = bfh(self.serialize_preimage(i))
-                        person = b'ZclassicSigHash' + SAPLING_BRANCH_ID.to_bytes(4, 'little')
+                        person = b'ZcashSigHash' + SAPLING_BRANCH_ID.to_bytes(4, 'little')
                         pre_hash = blake2b(data, digest_size=32, person=person).digest()
                     else:
                         pre_hash = Hash(bfh(self.serialize_preimage(i)))
