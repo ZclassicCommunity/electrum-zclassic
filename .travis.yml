@@ -12,55 +12,49 @@ matrix:
     language: ruby
     osx_image: xcode7.3
   - os: linux
-    python: "3.4"
+    python: '3.4'
     services:
     - docker
   - if: NOT tag =~ .+
     os: linux
-    python: "3.5"
+    python: '3.5'
   - if: NOT tag =~ .+
     os: linux
-    python: "3.6"
+    python: '3.6'
 before_install:
 - source contrib/zclassic/travis/electrum_zclassic_version_env.sh
 - echo electrum-zclassic version is $ELECTRUM_ZCL_VERSION
 - mkdir -p build && cp contrib/zclassic/travis/* ./build/
-- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-      ./build/before_install-osx.sh;
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then ./build/before_install-osx.sh;
   fi
-- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then
-      ./build/before_install-linux.sh;
-  fi
-- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then
-      ./build/before_install-linux-apk.sh;
-  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION
+  == '3.4' ]]; then ./build/before_install-linux.sh; fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION
+  == '3.5' ]]; then ./build/before_install-linux-apk.sh; fi
 install:
-- if [[ -z $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]]; then
-      pip install tox; pip install tox-travis;
-  fi
+- if [[ -z $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]]; then pip install tox;
+  pip install tox-travis; fi
 script:
-- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-      ./build/travis-build-osx.sh ;
-  fi
-- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.4' ]]; then
-      ./build/travis-build-linux.sh;
-  fi
-- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION == '3.5' ]]; then
-      ./build/travis-build-linux-apk.sh;
-  fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then ./build/travis-build-osx.sh
+  ; fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION
+  == '3.4' ]]; then ./build/travis-build-linux.sh; fi
+- if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]] && [[ $TRAVIS_PYTHON_VERSION
+  == '3.5' ]]; then ./build/travis-build-linux-apk.sh; fi
 deploy:
 - provider: releases
   api_key:
-    secure: G+TcxPJSQQ2bTNhkTX4aofnsiNFrzbuFTGty/+jIKDb/IQ69etXS9Ulu8KGD71VjEdXugFWdus+2a8fFSCSg79+AvrSxKa1ztXQ2q6tmovRkUcnF5Bkbc+ORLm3+FMZhonvMg+MLnHS3hnvJL/CZU0Pn2dkfODn7/t+MsGs99MN0G44qimq+FCu+YHaKVcGgiTs1I6nextIH+lnPw5qE6VxTQKdFp4PTHqY1qZJWamReVvtyMnfGpa+QwcKf43dXzZrHMLfFprfzEi1DExrhRi0a8RZlFWmAtkwH9zzJXzqOEmivniLfeALJzWkBJG4I2Fu7QSQhvPllhnt5uGdV3pgmHZUxL1DZckrqVG5b6P/Cnmbu0hWXbkPpZ7sXQ4X7wGhAVgH2sRPF1SfE9XvqDsmKvpspdKGmI+9yKoaWekbt8igfJ8jRBK4yRJAt+F/waeXkj7HJhSPIYg9wNvYCnCmoih4brRcTE4nyJBo/ySY3DVocflS3QGoClOrBpwXGgzwaUzBamRhJeCUe9ockPJyUs9DkuBIdsPfhq0nZfZFMhNBtpzm1hPGE92NojUi+DcI12WqweUqDWZzY/02MmfHLeN6mGgjTWvgOwnq1fvc6s7sVy7nANtA6UseWF2KUBYfuMKAxTU4WadpZ102znz4XiL4B7TILKJMU+Ht+a+c=
+    secure: n0KT+T49e1mOIV64wpVmf4bYga4KArHQnY9ZQ3u2DImLRGmhMkpa/OC6/oboDdzdyC+IhpcdwX7uCu2lxlsFBfP2zyuprEQThxeW8gL6pFaTMoJJ201lNjppFmCpbS2VqxDJWIap3E+RHwoQZpo+b8Lt2xoOzB1VZFdxm4qVCb/I4jl5ZWouibYxMwb9IsqdakTK7ZTmCN+YMthsbgvRpjbb1s5vuE5I3AjVx3dFOR2YYvfdwjfknSY9Ej7xfUqmkraRdd4kRQrznVDdB5i9gvPTF1hxtGGusxsDHEYAe6pUdDKk6XZ6esM/MhZDHnxWMt0wUKNrdIIlL9gI767AHiP+VQ5SAfbbVZrkCVIQ4d8s7dH4AbFlW0dsj5OuLb00Mp99FPxYpmMkdz6agWQmFky83Hc++DiGaRGZQr3eQUnKUkuGsWjueXCh5AC4uYNNYnXlaz2mkrKxenWgXscAa7XlyVcdZMAilMeOVOjZdjkjhN0bPz905NOm0sCSkOiR6v0iJmFsw2KKZwGNBG/DQV4bBWzbEu3G5ehCP4WkbXh0Cfjxqi56LkZt4YXbkFIHY+qj0gE6tRQbc42lad8+aLGbi4mKnttCuLZbN70E+c1Y++VAaYAOCqF9VlDD5/4OIizeRYW9hC18wD0+T3GWK+mezpWKrWdkdIEEVvt1SyQ=
   file:
   - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-macosx.dmg
   on:
     repo: ZclassicCommunity/electrum-zclassic
-    tags: true
+    tags: false
     condition: "$TRAVIS_OS_NAME = osx"
+    draft: true
 - provider: releases
   api_key:
-    secure: G+TcxPJSQQ2bTNhkTX4aofnsiNFrzbuFTGty/+jIKDb/IQ69etXS9Ulu8KGD71VjEdXugFWdus+2a8fFSCSg79+AvrSxKa1ztXQ2q6tmovRkUcnF5Bkbc+ORLm3+FMZhonvMg+MLnHS3hnvJL/CZU0Pn2dkfODn7/t+MsGs99MN0G44qimq+FCu+YHaKVcGgiTs1I6nextIH+lnPw5qE6VxTQKdFp4PTHqY1qZJWamReVvtyMnfGpa+QwcKf43dXzZrHMLfFprfzEi1DExrhRi0a8RZlFWmAtkwH9zzJXzqOEmivniLfeALJzWkBJG4I2Fu7QSQhvPllhnt5uGdV3pgmHZUxL1DZckrqVG5b6P/Cnmbu0hWXbkPpZ7sXQ4X7wGhAVgH2sRPF1SfE9XvqDsmKvpspdKGmI+9yKoaWekbt8igfJ8jRBK4yRJAt+F/waeXkj7HJhSPIYg9wNvYCnCmoih4brRcTE4nyJBo/ySY3DVocflS3QGoClOrBpwXGgzwaUzBamRhJeCUe9ockPJyUs9DkuBIdsPfhq0nZfZFMhNBtpzm1hPGE92NojUi+DcI12WqweUqDWZzY/02MmfHLeN6mGgjTWvgOwnq1fvc6s7sVy7nANtA6UseWF2KUBYfuMKAxTU4WadpZ102znz4XiL4B7TILKJMU+Ht+a+c=
+    secure: n0KT+T49e1mOIV64wpVmf4bYga4KArHQnY9ZQ3u2DImLRGmhMkpa/OC6/oboDdzdyC+IhpcdwX7uCu2lxlsFBfP2zyuprEQThxeW8gL6pFaTMoJJ201lNjppFmCpbS2VqxDJWIap3E+RHwoQZpo+b8Lt2xoOzB1VZFdxm4qVCb/I4jl5ZWouibYxMwb9IsqdakTK7ZTmCN+YMthsbgvRpjbb1s5vuE5I3AjVx3dFOR2YYvfdwjfknSY9Ej7xfUqmkraRdd4kRQrznVDdB5i9gvPTF1hxtGGusxsDHEYAe6pUdDKk6XZ6esM/MhZDHnxWMt0wUKNrdIIlL9gI767AHiP+VQ5SAfbbVZrkCVIQ4d8s7dH4AbFlW0dsj5OuLb00Mp99FPxYpmMkdz6agWQmFky83Hc++DiGaRGZQr3eQUnKUkuGsWjueXCh5AC4uYNNYnXlaz2mkrKxenWgXscAa7XlyVcdZMAilMeOVOjZdjkjhN0bPz905NOm0sCSkOiR6v0iJmFsw2KKZwGNBG/DQV4bBWzbEu3G5ehCP4WkbXh0Cfjxqi56LkZt4YXbkFIHY+qj0gE6tRQbc42lad8+aLGbi4mKnttCuLZbN70E+c1Y++VAaYAOCqF9VlDD5/4OIizeRYW9hC18wD0+T3GWK+mezpWKrWdkdIEEVvt1SyQ=
   file:
   - build/electrum-zclassic/dist/Electrum-Zclassic-$ELECTRUM_ZCL_VERSION.tar.gz
   - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-setup-win32.exe
@@ -68,5 +62,6 @@ deploy:
   - build/electrum-zclassic/bin/Electrum_Zclassic-$ELECTRUM_ZCL_APK_VERSION-release-unsigned.apk
   on:
     repo: ZclassicCommunity/electrum-zclassic
-    tags: true
+    tags: false
     condition: "$TRAVIS_OS_NAME = linux"
+    draft: true
