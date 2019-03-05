@@ -17,7 +17,10 @@ from electrum_zclassic.util import print_error, is_verbose, bfh, bh2u, versiontu
 
 
 def setAlternateCoinVersions(self, regular, p2sh):
-    apdu = [self.BTCHIP_CLA, 0x14, 0x00, 0x00, 0x02, regular, p2sh]
+    apdu = [ 0xE0, 0x14, 0x01, 0x05, 0x16, 0x1C, 0xB8, 0x1C, 0xBD, 0x01, 0x08]
+    apdu.extend("ZClassic".encode())
+    apdu.append(0x03)
+    apdu.extend("ZCL".encode())
     self.dongle.exchange(bytearray(apdu))
 
 try:

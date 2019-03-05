@@ -20,7 +20,6 @@ docker run --rm \
 sudo find . -name '*.po' -delete
 sudo find . -name '*.pot' -delete
 
-exit 0
 
 export WINEARCH=win32
 export WINEPREFIX=/root/.wine-32
