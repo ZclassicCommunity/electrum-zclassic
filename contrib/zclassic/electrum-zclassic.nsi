@@ -8,7 +8,7 @@
 ;Variables
 
   !define PRODUCT_NAME "Electrum-Zclassic"
-  !define PRODUCT_WEB_SITE "https://github.com/zebra-lucky/electrum-zclassic"
+  !define PRODUCT_WEB_SITE "https://github.com/ZclassicCommunity/electrum-zclassic"
   !define PRODUCT_PUBLISHER "Electrum Technologies GmbH"
   !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
   !define BUILD_ARCH "${WINEARCH}"

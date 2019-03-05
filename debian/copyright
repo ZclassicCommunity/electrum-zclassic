@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: electrum-zclassic
-Source: https://github.com/zebra-lucky/electrum-zclassic/
+Source: https://github.com/ZclassicCommunity/electrum-zclassic/
 
 Files: *
 Copyright: Electrum Team

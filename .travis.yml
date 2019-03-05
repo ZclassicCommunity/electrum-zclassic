@@ -39,9 +39,6 @@ install:
       pip install tox; pip install tox-travis;
   fi
 script:
-- if [[ -z $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'linux' ]];then
-      tox;
-  fi
 - if [[ -n $TRAVIS_TAG ]] && [[ $TRAVIS_OS_NAME == 'osx' ]]; then
       ./build/travis-build-osx.sh ;
   fi
@@ -58,7 +55,7 @@ deploy:
   file:
   - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-macosx.dmg
   on:
-    repo: zebra-lucky/electrum-zclassic
+    repo: ZclassicCommunity/electrum-zclassic
     tags: true
     condition: "$TRAVIS_OS_NAME = osx"
 - provider: releases
@@ -70,6 +67,6 @@ deploy:
   - build/electrum-zclassic/dist/electrum-zclassic-$ELECTRUM_ZCL_VERSION-setup-win64.exe
   - build/electrum-zclassic/bin/Electrum_Zclassic-$ELECTRUM_ZCL_APK_VERSION-release-unsigned.apk
   on:
-    repo: zebra-lucky/electrum-zclassic
+    repo: ZclassicCommunity/electrum-zclassic
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"

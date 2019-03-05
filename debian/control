@@ -19,7 +19,7 @@ Build-Depends:
  python3-socks (>= 1.6.5),
  python3-pyblake2 (>=0.9.3),
 Standards-Version: 4.1.3
-Homepage: https://github.com/zebra-lucky/electrum-zclassic
+Homepage: https://github.com/ZclassicCommunity/electrum-zclassic
 X-Python3-Version: >= 3.4
 
 Package: python3-electrum-zclassic

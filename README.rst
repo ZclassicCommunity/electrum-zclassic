@@ -53,7 +53,7 @@ Development version
 
 Check out the code from GitHub::
 
-    git clone git://github.com/zebra-lucky/electrum-zclassic.git
+    git clone git://github.com/ZclassicCommunity/electrum-zclassic.git
     cd electrum-zclassic
 
 Run install (this should install dependencies)::

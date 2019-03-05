@@ -6,7 +6,7 @@ if [[ -z $TRAVIS_TAG ]]; then
   exit 1
 fi
 
-BUILD_REPO_URL=https://github.com/zebra-lucky/electrum-zclassic
+BUILD_REPO_URL=https://github.com/ZclassicCommunity/electrum-zclassic
 
 cd build
 

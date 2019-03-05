@@ -541,9 +541,9 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
 
         help_menu = menubar.addMenu(_("&Help"))
         help_menu.addAction(_("&About"), self.show_about)
-        #help_menu.addAction(_("&Official website"), lambda: webbrowser.open("https://github.com/zebra-lucky/electrum-zclassic"))
+        #help_menu.addAction(_("&Official website"), lambda: webbrowser.open("https://github.com/ZclassicCommunity/electrum-zclassic"))
         help_menu.addSeparator()
-        #help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://github.com/zebra-lucky/electrum-zclassic")).setShortcut(QKeySequence.HelpContents)
+        #help_menu.addAction(_("&Documentation"), lambda: webbrowser.open("http://github.com/ZclassicCommunity/electrum-zclassic")).setShortcut(QKeySequence.HelpContents)
         #self._auto_crash_reports = QAction(_("&Automated Crash Reports"), self, checkable=True)
         #self._auto_crash_reports.setChecked(self.config.get("show_crash_reporter", default=False))
         #self._auto_crash_reports.triggered.connect(self.auto_crash_reports)
@@ -575,7 +575,7 @@ class ElectrumWindow(QMainWindow, MessageBoxMixin, PrintError):
     def show_report_bug(self):
         msg = ' '.join([
             _("Please report any bugs as issues on github:<br/>"),
-            "<a href=\"https://github.com/zebra-lucky/electrum-zclassic/issues\">https://github.com/zebra-lucky/electrum-zclassic/issues</a><br/><br/>",
+            "<a href=\"https://github.com/ZclassicCommunity/electrum-zclassic/issues\">https://github.com/ZclassicCommunity/electrum-zclassic/issues</a><br/><br/>",
             _("Before reporting a bug, upgrade to the most recent version of Electrum-Zclassic (latest release or git HEAD), and include the version number in your report."),
             _("Try to explain not only what the bug is, but how it occurs.")
          ])
