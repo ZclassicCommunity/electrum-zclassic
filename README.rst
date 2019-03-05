@@ -6,11 +6,11 @@ Electrum-Zclassic - Lightweight Zclassic client
   Licence: MIT Licence
   Author: Thomas Voegtlin
   Language: Python
-  Homepage: https://github.com/zebra-lucky/electrum-zclassic
+  Homepage: https://github.com/ZclassicCommunity/electrum-zcl
 
 
-.. image:: https://travis-ci.org/zebra-lucky/electrum-zclassic.svg?branch=master
-    :target: https://travis-ci.org/zebra-lucky/electrum-zclassic
+.. image:: https://travis-ci.org/ZclassicCommunity/electrum-zcl.svg?branch=master
+    :target: https://travis-ci.org/ZclassicCommunity/electrum-zcl
     :alt: Build Status
 
 
