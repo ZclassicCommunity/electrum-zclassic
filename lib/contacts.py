@@ -1,4 +1,4 @@
-# Electrum - Lightweight Bitcoin Client
+# Electrum - Lightweight ZClassic Client
 # Copyright (c) 2015 Thomas Voegtlin
 #
 # Permission is hereby granted, free of charge, to any person
@@ -132,4 +132,3 @@ class Contacts(dict):
                 if _type != 'address':
                     data.pop(k)
         return data
-

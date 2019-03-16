@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #
-# Electrum - Lightweight Bitcoin Client
+# Electrum - Lightweight ZClassic Client
 # Copyright (C) 2015 Thomas Voegtlin
 #
 # Permission is hereby granted, free of charge, to any person

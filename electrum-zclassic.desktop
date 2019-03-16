@@ -7,8 +7,8 @@ Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\" electrum-zclassic %u"
 GenericName[en_US]=Zclassic Wallet
 GenericName=Zclassic Wallet
 Icon=electrum-zclassic.png
-Name[en_US]=Electrum-Zclassic Bitcoin Wallet
-Name=Electrum-Zclassic Bitcoin Wallet
+Name[en_US]=Electrum-Zclassic Wallet
+Name=Electrum-Zclassic Wallet
 Categories=Finance;Network;
 StartupNotify=false
 Terminal=false

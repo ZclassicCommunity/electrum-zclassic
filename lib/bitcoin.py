@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Electrum - lightweight Bitcoin client
+# Electrum - lightweight ZClassic client
 # Copyright (C) 2011 thomasv@gitorious
 #
 # Permission is hereby granted, free of charge, to any person
@@ -357,7 +357,7 @@ def base_encode(v, base):
         result.append(chars[mod])
         long_value = div
     result.append(chars[long_value])
-    # Bitcoin does a little leading-zero-compression:
+    # ZClassic does a little leading-zero-compression:
     # leading 0-bytes in the input become leading-1s
     nPad = 0
     for c in v:
@@ -905,7 +905,7 @@ def xpub_from_xprv(xprv):
 
 
 def bip32_root(seed, xtype):
-    I = hmac.new(b"Bitcoin seed", seed, hashlib.sha512).digest()
+    I = hmac.new(b"ZClassic seed", seed, hashlib.sha512).digest()
     master_k = I[0:32]
     master_c = I[32:]
     K, cK = get_pubkeys_from_secret(master_k)
