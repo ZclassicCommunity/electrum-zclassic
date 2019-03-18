@@ -1,14 +1,20 @@
 {
-    "electrum.zclcore.com": {
-        "pruning": "-",
-        "s": "50002",
-        "t": "50001",
-        "version": "1.2"
-    },
-    "electrum.zcl.community": {
-        "pruning": "-",
-        "s": "50002",
-        "t": "50001",
-        "version": "1.2"
-    }
+  "electrum.zclcore.com": {
+      "pruning": "-",
+      "s": "50002",
+      "t": "50001",
+      "version": "1.2"
+  },
+  "electrum.zclassic.ch": {
+      "pruning": "-",
+      "s": "50002",
+      "t": "50001",
+      "version": "1.2"
+  },
+  "electrum.zcl.community": {
+      "pruning": "-",
+      "s": "50002",
+      "t": "50001",
+      "version": "1.2"
+  }
 }
