@@ -13,21 +13,17 @@ cp contrib/zclassic/deterministic.spec .
 cp contrib/zclassic/pyi_runtimehook.py .
 cp contrib/zclassic/pyi_tctl_runtimehook.py .
 
-wine pip install --upgrade pip
-export PYINSTALLER_TAG=dev180610
-wget https://github.com/zebra-lucky/pyinstaller/archive/$PYINSTALLER_TAG.tar.gz
-wine pip install $PYINSTALLER_TAG.tar.gz
-rm $PYINSTALLER_TAG.tar.gz
-
-wine pip install eth-hash==0.1.2
 wine pip install -r contrib/zclassic/requirements.txt
+wine pip install --upgrade pip==18.1
+wine pip install PyInstaller==3.4
 
-wine pip install x11_hash
-wine pip install cython
+wine pip install cython=0.29.3
 wine pip install hidapi
 wine pip install pycryptodomex==3.6.0
-wine pip install btchip-python==0.1.26
+wine pip install btchip-python==0.1.28
 wine pip install keepkey==4.0.2
+
+wine pip install rlp==0.6.0
 wine pip install trezor==0.9.1
 
 mkdir $WINEPREFIX/drive_c/Qt

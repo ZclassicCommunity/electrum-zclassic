@@ -9,7 +9,8 @@ fi
 cd build
 
 brew update
-brew install zebra-lucky/qt5/qt5
+brew tap zebra-lucky/qt5
+brew install zebra-lucky/qt5/qt
 brew install gettext
 
 curl -O https://www.python.org/ftp/python/3.6.5/python-3.6.5-macosx10.6.pkg
