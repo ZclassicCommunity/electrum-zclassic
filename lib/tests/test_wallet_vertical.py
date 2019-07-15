@@ -68,14 +68,14 @@ class TestWalletKeystoreAddressIntegrityForMainnet(unittest.TestCase):
         WalletIntegrityHelper.check_seeded_keystore_sanity(self, ks)
         self.assertTrue(isinstance(ks, keystore.BIP32_KeyStore))
 
-        self.assertEqual(ks.xprv, 'xprv9s21ZrQH143K32jECVM729vWgGq4mUDJCk1ozqAStTphzQtCTuoFmFafNoG1g55iCnBTXUzz3zWnDb5CVLGiFvmaZjuazHDL8a81cPQ8KL6')
-        self.assertEqual(ks.xpub, 'xpub661MyMwAqRbcFWohJWt7PHsFEJfZAvw9ZxwQoDa4SoMgsDDM1T7WK3u9E4edkC4ugRnZ8E4xDZRpk8Rnts3Nbt97dPwT52CwBdDWroaZf8U')
+        self.assertEqual(ks.xprv, 'xprv9s21ZrQH143K2ghMCZbyreZcic8NSSuC8AG1gSTVPdvjiXufyQJyEVwUmS7EBtsH1YKdaMC17EBDrSzpe7M4k48FUYtJpzJNNptxbnpHEXL')
+        self.assertEqual(ks.xpub, 'xpub661MyMwAqRbcFAmpJb8zDnWMGdxrqud3VPBcUps6wyTibLEpWwdDnJFxchhCazNLf4xNd3SpAEifKJoL4LSy5jBj2iqXdrfBMmxTWevpCQs')
 
         w = WalletIntegrityHelper.create_standard_wallet(ks)
         self.assertEqual(w.txin_type, 'p2pkh')
 
-        self.assertEqual(w.get_receiving_addresses()[0], 't1fFMuEC9XFGsEUEPzpEE8jhxpcEMs369xJ')
-        self.assertEqual(w.get_change_addresses()[0], 't1cKFzsmq8d97RtePBbqS1WebLofuXaXkzF')
+        self.assertEqual(w.get_receiving_addresses()[0], 't1WuqhS6byNzoKu3LJrpfv2BGp7oiATxzyn')
+        self.assertEqual(w.get_change_addresses()[0], 't1fvzMLWaFGdJnsJ7K5Ju1jMuC3bKexciyL')
 
     @mock.patch.object(storage.WalletStorage, '_write')
     def test_electrum_seed_old(self, mock_write):
@@ -104,14 +104,14 @@ class TestWalletKeystoreAddressIntegrityForMainnet(unittest.TestCase):
 
         self.assertTrue(isinstance(ks, keystore.BIP32_KeyStore))
 
-        self.assertEqual(ks.xprv, 'xprv9zGLcNEb3cHUKizLVBz6RYeE9bEZAVPjH2pD1DEzCnPcsemWc3d3xTao8sfhfUmDLMq6e3RcEMEvJG1Et8dvfL8DV4h7mwm9J6AJsW9WXQD')
-        self.assertEqual(ks.xpub, 'xpub6DFh1smUsyqmYD4obDX6ngaxhd53Zx7aeFjoobebm7vbkT6f9awJWFuGzBT9FQJEWFBL7UyhMXtYzRcwDuVbcxtv9Ce2W9eMm4KXLdvdbjv')
+        self.assertEqual(ks.xprv, 'xprv9z8mPoJhK3FiPpzM3gPVYxLkaq6QeCYpwLheSgPBHH3RURwnZYaTqxzLWnkyFMtV1vm8hGTkEjrJRoYegJwgFKEg1K9bsdf3UrpcAcnSj6w')
+        self.assertEqual(ks.xpub, 'xpub6D87oJqb9Qp1cK4p9hvVv6HV8rvu3fGgJZdFF4nnqcaQMEGw75tiPmJpN3CQrZR9gpHe7zycB78ynLfT3v6451qoC8k3YcGyiuWyWzuXaKN')
 
         w = WalletIntegrityHelper.create_standard_wallet(ks)
         self.assertEqual(w.txin_type, 'p2pkh')
 
-        self.assertEqual(w.get_receiving_addresses()[0], 't1PbiEBABXU1E4GEnE31cUPULDoYYWVMpjs')
-        self.assertEqual(w.get_change_addresses()[0], 't1Z8gbq4eeVbg89ACGddq1T6yfEP9bQx9Ki')
+        self.assertEqual(w.get_receiving_addresses()[0], 't1fiRjRCGirFb2PprWzYdXjukAAuYB89Gzz')
+        self.assertEqual(w.get_change_addresses()[0], 't1SVeFNqPq3SzuuzWmbJjj6TX9W8kv7eWJL')
 
     @mock.patch.object(storage.WalletStorage, '_write')
     def test_electrum_multisig_seed_standard(self, mock_write):
@@ -121,8 +121,8 @@ class TestWalletKeystoreAddressIntegrityForMainnet(unittest.TestCase):
         ks1 = keystore.from_seed(seed_words, '', True)
         WalletIntegrityHelper.check_seeded_keystore_sanity(self, ks1)
         self.assertTrue(isinstance(ks1, keystore.BIP32_KeyStore))
-        self.assertEqual(ks1.xprv, 'xprv9s21ZrQH143K3t9vo23J3hajRbzvkRLJ6Y1zFrUFAfU3t8oooMPfb7f87cn5KntgqZs5nipZkCiBFo5ZtaSD2eDo7j7CMuFV8Zu6GYLTpY6')
-        self.assertEqual(ks1.xpub, 'xpub661MyMwAqRbcGNEPu3aJQqXTydqR9t49Tkwb4Esrj112kw8xLthv8uybxvaki4Ygt9xiwZUQGeFTG7T2TUzR3eA4Zp3aq5RXsABHFBUrq4c')
+        self.assertEqual(ks1.xprv, 'xprv9s21ZrQH143K2qPRVQ1Z66ZqoNSWoyxWdBXKivnt1TCaAoe7Pa74eYxWRtpSnYrZsvoBcxJqM6H2sGrzkQDPcHKUwztcwSpkTYpAz5y3LJh')
+        self.assertEqual(ks1.xpub, 'xpub661MyMwAqRbcFKTtbRYZTEWaMQH1DSgMzQSvXKCVZnjZ3byFw7RKCMGzH9G2U7MTTxYuaEhL3suS4HFGHb66QbiDaHPgCZoGNx2678FKe3X')
 
         # electrum seed: ghost into match ivory badge robot record tackle radar elbow traffic loud
         ks2 = keystore.from_xpub('xpub661MyMwAqRbcGfCPEkkyo5WmcrhTq8mi3xuBS7VEZ3LYvsgY1cCFDbenT33bdD12axvrmXhuX3xkAbKci3yZY9ZEk8vhLic7KNhLjqdh5ec')
@@ -132,8 +132,8 @@ class TestWalletKeystoreAddressIntegrityForMainnet(unittest.TestCase):
         w = WalletIntegrityHelper.create_multisig_wallet(ks1, ks2)
         self.assertEqual(w.txin_type, 'p2sh')
 
-        self.assertEqual(w.get_receiving_addresses()[0], 't3KcK3kAJerAahSJhN6Pt729u7ficQqK4XX')
-        self.assertEqual(w.get_change_addresses()[0], 't3PQ7wZhzpoywPLnD1nfcd5sPYLtw2qh5ak')
+        self.assertEqual(w.get_receiving_addresses()[0], 't3eXoCQLLLZnf95PhrrQhoDTsGdR8FwLhXe')
+        self.assertEqual(w.get_change_addresses()[0], 't3RoTuEy2FbMgP3urUmYTFpbajjbMpECh9S')
 
     @mock.patch.object(storage.WalletStorage, '_write')
     def test_bip39_multisig_seed_bip45_standard(self, mock_write):
@@ -142,8 +142,8 @@ class TestWalletKeystoreAddressIntegrityForMainnet(unittest.TestCase):
 
         ks1 = keystore.from_bip39_seed(seed_words, '', "m/45'/0")
         self.assertTrue(isinstance(ks1, keystore.BIP32_KeyStore))
-        self.assertEqual(ks1.xprv, 'xprv9vyEFyXf7pYVv4eDU3hhuCEAHPHNGuxX73nwtYdpbLcqwJCPwFKknAK8pHWuHHBirCzAPDZ7UJHrYdhLfn1NkGp9rk3rVz2aEqrT93qKRD9')
-        self.assertEqual(ks1.xpub, 'xpub69xafV4YxC6o8Yiga5EiGLAtqR7rgNgNUGiYgw3S9g9pp6XYUne1KxdcfYtxwmA3eBrzMFuYcNQKfqsXCygCo4GxQFHfywxpUbKNfYvGJka')
+        self.assertEqual(ks1.xprv, 'xprv9w8rAFAEVWArZQjheVqb3wkb2s4LzyCz8crjnsz9Le2hXbsvp6x1vxk1aC7GinLWBGkADbBnCbU9cLe7goagdHAdDYk231FK9uWp6nbVN8a')
+        self.assertEqual(ks1.xpub, 'xpub6A8CZkh8Ksj9mtpAkXNbR5hKattqQRvqVqnLbGPktyZgQQD5MeGGUm4VRUxfX8jBebX9bcwK7V234sCqboDBxcmA9qSZpy7gnmysRWGdzoz')
 
         # bip39 seed: tray machine cook badge night page project uncover ritual toward person enact
         # der: m/45'/0
@@ -154,6 +154,6 @@ class TestWalletKeystoreAddressIntegrityForMainnet(unittest.TestCase):
         w = WalletIntegrityHelper.create_multisig_wallet(ks1, ks2)
         self.assertEqual(w.txin_type, 'p2sh')
 
-        self.assertEqual(w.get_receiving_addresses()[0], 't3ZvKyVcMRf5rofUFgN8gk23jtCkRh12Lja')
-        self.assertEqual(w.get_change_addresses()[0], 't3JaafdGtfhXJzCrupYct6tJBdD2XZUtm8H')
+        self.assertEqual(w.get_receiving_addresses()[0], 't3YmFV8iPfehb2aVAmod4bEqFVwQTGf4j1i')
+        self.assertEqual(w.get_change_addresses()[0], 't3ND13q6EWVnYUme5Ko6VAYxPbP6bae2RcH')
 
