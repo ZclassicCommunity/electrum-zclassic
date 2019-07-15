@@ -6,9 +6,9 @@
 ;--------------------------------
 ;Variables
 
-  !define PRODUCT_NAME "ZClassic Electrum"
-  !define PRODUCT_WEB_SITE "https://github.com/ZClassicCommunity/electrum-zclassic"
-  !define PRODUCT_PUBLISHER "ZClassic Electrum Technologies"
+  !define PRODUCT_NAME "Zclassic Electrum"
+  !define PRODUCT_WEB_SITE "https://github.com/ZclassicCommunity/electrum-zclassic"
+  !define PRODUCT_PUBLISHER "Zclassic Electrum Technologies"
   !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
 ;--------------------------------

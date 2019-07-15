@@ -22,9 +22,8 @@ echo wine build version is $ELECTRUM_ZCL_VERSION
 sudo pip3 install --upgrade pip
 sudo pip3 install -r contrib/deterministic-build/requirements.txt
 sudo pip3 install \
-    x11_hash>=1.4 \
     pycryptodomex==3.6.0 \
-    btchip-python==0.1.26 \
+    btchip-python==0.1.28 \
     keepkey==4.0.2 \
     trezor==0.9.1
 

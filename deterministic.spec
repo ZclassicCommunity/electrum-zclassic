@@ -50,7 +50,7 @@ datas += collect_data_files('trezorlib')
 datas += collect_data_files('btchip')
 datas += collect_data_files('keepkeylib')
 
-binaries = [('C:/Python34/libusb-1.0.dll', '.')]
+binaries = [('C:/Python36/libusb-1.0.dll', '.')]
 
 # https://github.com/pyinstaller/pyinstaller/wiki/Recipe-remove-tkinter-tcl
 sys.modules['FixTk'] = None
@@ -136,7 +136,7 @@ conexe = EXE(pyz,
                             'console-%s' % cmdline_name))
 
 # trezorctl separate executable
-tctl_a = Analysis(['C:/Python34/Scripts/trezorctl'],
+tctl_a = Analysis(['C:/Python36/Scripts/trezorctl'],
                   hiddenimports=['pkgutil'],
                   excludes=excludes,
                   runtime_hooks=['pyi_tctl_runtimehook.py'])
