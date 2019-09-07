@@ -37,7 +37,7 @@ import socks
 from . import util
 from . import bitcoin
 from .bitcoin import *
-from .blockchain import HDR_LEN, CHUNK_LEN
+from .blockchain import HDR_LEN, HDR_EH_192_7_LEN, CHUNK_LEN
 from . import constants
 from .interface import Connection, Interface
 from . import blockchain
@@ -831,7 +831,7 @@ class Network(util.DaemonThread):
             self.connection_down(interface.server)
             return
 
-        if len(hex_header) != HDR_LEN*2:
+        if len(hex_header) != HDR_LEN*2 and len(hex_header) != HDR_EH_192_7_LEN:
             interface.print_error('wrong header length', interface.request)
             self.connection_down(interface.server)
             return
@@ -1013,7 +1013,7 @@ class Network(util.DaemonThread):
         if not height or not hex_header:
             return
 
-        if len(hex_header) != HDR_LEN*2:
+        if len(hex_header) != HDR_LEN*2 and len(hex_header) != HDR_EH_192_7_LEN*2:
             interface.print_error('wrong header length', interface.request)
             self.connection_down(interface.server)
             return

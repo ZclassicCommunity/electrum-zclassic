@@ -29,7 +29,9 @@ from . import constants
 from .bitcoin import *
 
 HDR_LEN = 1487
+HDR_EH_192_7_LEN = 543
 CHUNK_LEN = 100
+BUBBLES_ACTIVATION_HEIGHT = 585318
 
 MAX_TARGET = 0x0007FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 POW_AVERAGING_WINDOW = 17
@@ -65,7 +67,7 @@ def serialize_header(res):
 def deserialize_header(s, height):
     if not s:
         raise Exception('Invalid header: {}'.format(s))
-    if len(s) != HDR_LEN:
+    if len(s) != HDR_LEN and len(s) != HDR_EH_192_7_LEN:
         raise Exception('Invalid header length: {}'.format(len(s)))
     hex_to_int = lambda s: int('0x' + bh2u(s[::-1]), 16)
     h = {}
@@ -77,7 +79,10 @@ def deserialize_header(s, height):
     h['bits'] = hex_to_int(s[104:108])
     h['nonce'] = hash_encode(s[108:140])
     h['sol_size'] = hash_encode(s[140:143])
-    h['solution'] = hash_encode(s[143:1487])
+    if height < BUBBLES_ACTIVATION_HEIGHT:
+        h['solution'] = hash_encode(s[143:HDR_LEN])
+    else:
+        h['solution'] = hash_encode(s[143:HDR_EH_192_7_LEN])
     h['block_height'] = height
     return h
 
@@ -275,7 +280,7 @@ class Blockchain(util.PrintError):
         delta = header.get('block_height') - self.checkpoint
         data = bfh(serialize_header(header))
         assert delta == self.size()
-        assert len(data) == HDR_LEN
+        assert len(data) == HDR_LEN or len(data) == HDR_EH_192_7_LEN
         self.write(data, delta*HDR_LEN)
         self.swap_with_parent()
 
