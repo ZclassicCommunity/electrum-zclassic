@@ -831,7 +831,7 @@ class Network(util.DaemonThread):
             self.connection_down(interface.server)
             return
 
-        if len(hex_header) != HDR_LEN*2 and len(hex_header) != HDR_EH_192_7_LEN:
+        if len(hex_header) != HDR_LEN*2 and len(hex_header) != HDR_EH_192_7_LEN*2:
             interface.print_error('wrong header length', interface.request)
             self.connection_down(interface.server)
             return
