@@ -47,6 +47,7 @@ OVERWINTER_BRANCH_ID = 0x5BA81B19
 SAPLING_VERSION_GROUP_ID = 0x892F2085
 SAPLING_BRANCH_ID = 0x76B809BB
 BUBBLES_BRANCH_ID = 0x821A451C
+DIFFADJ_BRANCH_ID = 0x930B540D
 
 
 class TransactionVersionError(Exception):
@@ -994,7 +995,7 @@ class Transaction:
                     # add signature
                     if self.overwintered:
                         data = bfh(self.serialize_preimage(i))
-                        person = b'ZcashSigHash' + BUBBLES_BRANCH_ID.to_bytes(4, 'little')
+                        person = b'ZcashSigHash' + DIFFADJ_BRANCH_ID.to_bytes(4, 'little')
                         pre_hash = blake2b(data, digest_size=32, person=person).digest()
                     else:
                         pre_hash = Hash(bfh(self.serialize_preimage(i)))
