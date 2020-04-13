@@ -34,6 +34,7 @@ HDR_EH_192_7_LEN = 543
 CHUNK_LEN = 100
 BUBBLES_ACTIVATION_HEIGHT = 585318
 DIFFADJ_ACTIVATION_HEIGHT = 585322
+BUTTERCUP_ACTIVATION_HEIGHT = 707000
 
 MAX_TARGET = 0x0007FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
 POW_AVERAGING_WINDOW = 17
@@ -41,18 +42,24 @@ POW_MEDIAN_BLOCK_SPAN = 11
 POW_MAX_ADJUST_DOWN = 32
 POW_MAX_ADJUST_UP = 16
 POW_DAMPING_FACTOR = 4
-POW_TARGET_SPACING = 150
+PRE_BUTTERCUP_POW_TARGET_SPACING = 150
+POST_BUTTERCUP_POW_TARGET_SPACING = 75
 
 TARGET_CALC_BLOCKS = POW_AVERAGING_WINDOW + POW_MEDIAN_BLOCK_SPAN
 
-AVERAGING_WINDOW_TIMESPAN = POW_AVERAGING_WINDOW * POW_TARGET_SPACING
+def get_pow_target_spacing(height):
+    if height >= BUTTERCUP_ACTIVATION_HEIGHT:
+        return POST_BUTTERCUP_POW_TARGET_SPACING
+    return PRE_BUTTERCUP_POW_TARGET_SPACING
 
-MIN_ACTUAL_TIMESPAN = AVERAGING_WINDOW_TIMESPAN * \
-    (100 - POW_MAX_ADJUST_UP) // 100
+def get_averaging_window_timespan(height):
+    return POW_AVERAGING_WINDOW * get_pow_target_spacing(height)
 
-MAX_ACTUAL_TIMESPAN = AVERAGING_WINDOW_TIMESPAN * \
-    (100 + POW_MAX_ADJUST_DOWN) // 100
+def get_min_actual_timespan(height):
+    return get_averaging_window_timespan(height) * (100 - POW_MAX_ADJUST_UP) // 100
 
+def get_max_actual_timespan(height):
+    return get_averaging_window_timespan(height) * (100 + POW_MAX_ADJUST_DOWN) // 100
 
 def is_post_equihash_fork(height):
     return height >= BUBBLES_ACTIVATION_HEIGHT
@@ -230,6 +237,14 @@ class Blockchain(util.PrintError):
                 0x1f024703, 0x1f027448, 0x1f02a510, 0x1f02d9a3, 0x1f03124a,
                 ]
             bits = valid_bits[height%DIFFADJ_ACTIVATION_HEIGHT]
+            target = self.bits_to_target(bits)
+        elif height >= BUTTERCUP_ACTIVATION_HEIGHT and height < BUTTERCUP_ACTIVATION_HEIGHT + POW_AVERAGING_WINDOW:
+            valid_bits = [
+                0x1f07ffff, 0x1f00a083, 0x1f00ace2, 0x1f00ba38, 0x1f07ffff, 0x1f016783,
+                0x1f018356, 0x1f01a152, 0x1f01c1a2, 0x1f01e474, 0x1f0209fc, 0x1f02326c,
+                0x1f025e01, 0x1f028cf8, 0x1f02bf93, 0x1f02f61c, 0x1f0330df,
+            ]
+            bits = valid_bits[height%BUTTERCUP_ACTIVATION_HEIGHT]
             target = self.bits_to_target(bits)
         if bits != header.get('bits'):
             raise Exception("bits mismatch: %s vs %s" % (bits, header.get('bits')))
@@ -426,15 +441,15 @@ class Blockchain(util.PrintError):
 
         actual_timespan = self.get_median_time(height, chunk_headers) - \
             self.get_median_time(height - POW_AVERAGING_WINDOW, chunk_headers)
-        actual_timespan = AVERAGING_WINDOW_TIMESPAN + \
-            int((actual_timespan - AVERAGING_WINDOW_TIMESPAN) / \
+        actual_timespan = get_averaging_window_timespan(height) + \
+            int((actual_timespan - get_averaging_window_timespan(height)) / \
                 POW_DAMPING_FACTOR)
-        if actual_timespan < MIN_ACTUAL_TIMESPAN:
-            actual_timespan = MIN_ACTUAL_TIMESPAN
-        elif actual_timespan > MAX_ACTUAL_TIMESPAN:
-            actual_timespan = MAX_ACTUAL_TIMESPAN
+        if actual_timespan < get_min_actual_timespan(height):
+            actual_timespan = get_min_actual_timespan(height)
+        elif actual_timespan > get_max_actual_timespan(height):
+            actual_timespan = get_max_actual_timespan(height)
 
-        next_target = mean_target // AVERAGING_WINDOW_TIMESPAN * actual_timespan
+        next_target = mean_target // get_averaging_window_timespan(height) * actual_timespan
 
         if next_target > MAX_TARGET:
             next_target = MAX_TARGET
