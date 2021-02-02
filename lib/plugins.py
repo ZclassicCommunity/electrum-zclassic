@@ -312,6 +312,8 @@ class DeviceMgr(ThreadJob, PrintError):
         # What we recognise.  Each entry is a (vendor_id, product_id)
         # pair.
         self.recognised_hardware = set()
+        # Each entry is a (vendor_id)
+        self.recognized_vendor = set()
         # Custom enumerate functions for devices we don't know about.
         self.enumerate_func = set()
         # For synchronization
@@ -335,6 +337,10 @@ class DeviceMgr(ThreadJob, PrintError):
     def register_devices(self, device_pairs):
         for pair in device_pairs:
             self.recognised_hardware.add(pair)
+
+    def register_vendor_ids(self, vendor_ids):
+        for vendor_id in vendor_ids:
+            self.recognized_vendor.add(vendor_id)
 
     def register_enumerate_func(self, func):
         self.enumerate_func.add(func)
@@ -468,7 +474,7 @@ class DeviceMgr(ThreadJob, PrintError):
         devices = [dev for dev in devices if not self.xpub_by_id(dev.id_)]
         infos = []
         for device in devices:
-            if device.product_key not in plugin.DEVICE_IDS:
+            if not plugin.can_recognize_device(device):
                 continue
             client = self.create_client(device, handler, plugin)
             if not client:
@@ -524,18 +530,30 @@ class DeviceMgr(ThreadJob, PrintError):
 
         devices = []
         for d in hid_list:
-            product_key = (d['vendor_id'], d['product_id'])
+            vendor_id = d['vendor_id']
+            product_key = (vendor_id, d['product_id'])
+
+            recognized = False
             if product_key in self.recognised_hardware:
-                # Older versions of hid don't provide interface_number
-                interface_number = d.get('interface_number', -1)
-                usage_page = d['usage_page']
-                id_ = d['serial_number']
-                if len(id_) == 0:
-                    id_ = str(d['path'])
-                id_ += str(interface_number) + str(usage_page)
-                devices.append(Device(d['path'], interface_number,
-                                      id_, product_key, usage_page))
+                recognized = True
+            elif vendor_id in self.recognized_vendor:
+                recognized = True
+            if recognized:
+                device = self._create_device_from_hid(d, product_key)
+                if device:
+                    devices.append(device)
         return devices
+
+    def _create_device_from_hid(self, hid, product_key):
+        # Older versions of hid don't provide interface_number
+        interface_number = hid.get('interface_number', -1)
+        usage_page = hid['usage_page']
+        id_ = hid['serial_number']
+        if len(id_) == 0:
+            id_ = str(hid['path'])
+        id_ += str(interface_number) + str(usage_page)
+        device = Device(hid['path'], interface_number, id_, product_key, usage_page)
+        return device
 
     def scan_devices(self):
         self.print_error("scanning devices...")
@@ -555,18 +573,26 @@ class DeviceMgr(ThreadJob, PrintError):
 
         # find out what was disconnected
         pairs = [(dev.path, dev.id_) for dev in devices]
-        disconnected_ids = []
+        disconnected_clients = []
         with self.lock:
             connected = {}
             for client, pair in self.clients.items():
-                if pair in pairs and client.has_usable_connection_with_device():
-                    connected[client] = pair
+                if pair in pairs:
+                    try:
+                        client.has_usable_connection_with_device()
+                        connected[client] = pair
+                    except BaseException:
+                        disconnected_clients.append((client, pair[1]))
                 else:
-                    disconnected_ids.append(pair[1])
-            self.clients = connected
+                    disconnected_clients.append((client, pair[1]))
+
+            if connected:
+                self.clients = connected
 
         # Unpair disconnected devices
-        for id_ in disconnected_ids:
+        for client, id_ in disconnected_clients:
             self.unpair_id(id_)
+            if hasattr(client, 'handler') and client.handler:
+                client.handler.update_status(False)
 
         return devices

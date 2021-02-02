@@ -4,7 +4,8 @@ from struct import pack, unpack
 from btchip.btchip import btchip
 from btchip.bitcoinTransaction import bitcoinInput, bitcoinOutput
 from btchip.bitcoinVarint import readVarint, writeVarint
-from btchip.btchipHelpers import parse_bip32_path, writeUint32BE
+from btchip.btchipHelpers import parse_bip32_path, writeUint32BE, writeHexAmountBE, btc_to_satoshi
+from btchip.btchipException import BTChipException
 
 from electrum_zclassic.transaction import (OVERWINTERED_VERSION_GROUP_ID,
                                         SAPLING_VERSION_GROUP_ID)
@@ -166,16 +167,21 @@ class btchip_zcash(btchip):
                     else:
                         dataLength = len(outputs) - offset
                         p1 = 0x80
-                    apdu = [ self.BTCHIP_CLA, self.BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, \
+                    apdu = [self.BTCHIP_CLA, self.BTCHIP_INS_HASH_INPUT_FINALIZE_FULL, \
                         p1, 0x00, dataLength ]
                     apdu.extend(outputs[offset : offset + dataLength])
                     response = self.dongle.exchange(bytearray(apdu))
                     offset += dataLength
                 alternateEncoding = True
-            except:
+            except BTChipException as e:
+                if e.sw == 0x6985:  # cancelled by user
+                    return
+                else:
+                    raise  # unknown exception
+            except Exception:
                 pass
         if not alternateEncoding:
-            apdu = [ self.BTCHIP_CLA, self.BTCHIP_INS_HASH_INPUT_FINALIZE, 0x02, 0x00 ]
+            apdu = [self.BTCHIP_CLA, self.BTCHIP_INS_HASH_INPUT_FINALIZE, 0x02, 0x00]
             params = []
             params.append(len(outputAddress))
             params.extend(bytearray(outputAddress))
@@ -185,6 +191,7 @@ class btchip_zcash(btchip):
             apdu.append(len(params))
             apdu.extend(params)
             response = self.dongle.exchange(bytearray(apdu))
+
         result['confirmationNeeded'] = response[1 + response[0]] != 0x00
         result['confirmationType'] = response[1 + response[0]]
         if result['confirmationType'] == 0x02:
@@ -200,7 +207,7 @@ class btchip_zcash(btchip):
             offset = 1 + response[0] + 1
             keycardDataLength = response[offset]
             result['keycardData'] = response[offset + 1 : offset + 1 + keycardDataLength]
-        if outputs == None:
+        if outputs is None:
             result['outputData'] = response[1 : 1 + response[0]]
         else:
             result['outputData'] = outputs
