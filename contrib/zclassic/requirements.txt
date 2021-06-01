@@ -11,5 +11,5 @@ PySocks==1.6.7
 qrcode==5.3
 requests==2.18.4
 six==1.11.0
-urllib3==1.22
+urllib3==1.26.5
 pyblake2==1.1.2
