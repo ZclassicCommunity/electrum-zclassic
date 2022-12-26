@@ -56,6 +56,6 @@ six==1.11.0 \
 websocket-client==0.47.0 \
     --hash=sha256:188b68b14fdb2d8eb1a111f21b9ffd2dbf1dbc4e4c1d28cf2c37cdbf1dd1cae6 \
     --hash=sha256:a453dc4dfa6e0db3d8fd7738a308a88effe6240c59f3226eb93e8f020c216149
-wheel==0.31.0 \
-    --hash=sha256:1ae8153bed701cb062913b72429bcf854ba824f973735427681882a688cb55ce \
-    --hash=sha256:9cdc8ab2cc9c3c2e2727a4b67c22881dbb0e1c503d592992594c5e131c867107
+wheel==0.38.1 \
+    --hash=sha256:7a95f9a8dc0924ef318bd55b616112c70903192f524d120acc614f59547a9e1f \
+    --hash=sha256:ea041edf63f4ccba53ad6e035427997b3bb10ee88a4cd014ae82aeb9eea77bb9
